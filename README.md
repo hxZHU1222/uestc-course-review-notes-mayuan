@@ -105,15 +105,8 @@ https://g9tvo9xbp6.feishu.cn/wiki/AatBwiDa7ig7RJkzdlocLm1cnTh
 
 ## 关于原始文件
 
-为减少版权和传播风险，建议不要在公开仓库中上传原始 Word、PDF、PPTX 等大体积资料文件。当前仓库主要保留经过整理后的静态网页、结构化复习数据与必要的来源说明。
+为减少版权和传播风险，没有在公开仓库中上传原始 Word、PDF、PPTX 等大体积资料文件。当前仓库主要保留经过整理后的静态网页、结构化复习数据与必要的来源说明。
 
-如果需要重新生成数据，可在本地保留 `source/` 目录，并运行：
-
-```bash
-python scripts/build_all.py
-```
-
-生成后的网页数据会输出到 `data/` 目录，思维导图图片会输出到 `assets/mindmap/` 目录。
 
 ## 使用建议
 
