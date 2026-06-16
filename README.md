@@ -4,8 +4,6 @@
 
 项目采用纯前端静态页面实现，可以直接通过浏览器打开，也部署到 GitHub Pages了。
 
-https://hxzhu1222.github.io/uestc-course-review-notes-mayuan/
-便于大家查看，密码依旧是mayuan。
 
 ## 项目内容
 
@@ -18,22 +16,10 @@ https://hxzhu1222.github.io/uestc-course-review-notes-mayuan/
 * **思维导图浏览**：将课程思维导图拆分为网页可浏览图片。
 * **资料/检查页面**：展示数据抽取结果、覆盖情况与解析检查信息。
 
-## 数据概况
-
-当前版本数据统计如下：
-
-| 模块        |   数量 |
-| --------- | ---: |
-| 背诵卡片      |  215 |
-| Word 讲义段落 | 1251 |
-| 已覆盖讲义段落   | 1251 |
-| 简答题       |   61 |
-| 选择题       |  400 |
-| 思维导图页面    |   13 |
-| 思维导图节点    |  236 |
-| 自动关联条目    |  523 |
 
 ## 在线使用
+
+https://hxzhu1222.github.io/uestc-course-review-notes-mayuan/
 
 默认访问密码：
 
