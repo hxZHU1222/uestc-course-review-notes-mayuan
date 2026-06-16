@@ -1,0 +1,44 @@
+[
+  {
+    "key": "word",
+    "name": "马克思主义基本原理丨2024.docx",
+    "found": true,
+    "path": "source\\马克思主义基本原理丨2024.docx",
+    "size": 996369
+  },
+  {
+    "key": "short_pdf",
+    "name": "马原简答题部分题库-202206.pdf",
+    "found": true,
+    "path": "source\\马原简答题部分题库-202206.pdf",
+    "size": 156094
+  },
+  {
+    "key": "choice_docx",
+    "name": "题库rk 带答案.docx",
+    "found": true,
+    "path": "source\\题库rk 带答案.docx",
+    "size": 86970
+  },
+  {
+    "key": "mindmap_pptx",
+    "name": "马原思维导图.pptx",
+    "found": true,
+    "path": "source\\马原思维导图.pptx",
+    "size": 126683
+  },
+  {
+    "key": "utiku_pdf",
+    "name": "优题库马原纯享版.pdf",
+    "found": true,
+    "path": "source\\优题库马原纯享版.pdf",
+    "size": 32173463
+  },
+  {
+    "key": "utiku_answer_pdf",
+    "name": "优题库答案.pdf",
+    "found": true,
+    "path": "source\\优题库答案.pdf",
+    "size": 178335927
+  }
+]

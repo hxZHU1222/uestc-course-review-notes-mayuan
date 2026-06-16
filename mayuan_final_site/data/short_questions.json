@@ -1,0 +1,911 @@
+[
+  {
+    "id": "SQ001",
+    "number": 1,
+    "title": "马克思主义的鲜明特征？",
+    "pageHint": "P9",
+    "examYears": [],
+    "chapter": "导论",
+    "level": "B",
+    "linkedCardIds": [
+      "K0001",
+      "K0002",
+      "K0003",
+      "K0004"
+    ]
+  },
+  {
+    "id": "SQ002",
+    "number": 2,
+    "title": "马克思主义的当代价值？",
+    "pageHint": "P13",
+    "examYears": [],
+    "chapter": "导论",
+    "level": "B",
+    "linkedCardIds": [
+      "K0005",
+      "K0059",
+      "K0143",
+      "K0002"
+    ]
+  },
+  {
+    "id": "SQ003",
+    "number": 3,
+    "title": "如何自觉和运用马克思主义？",
+    "pageHint": "P17",
+    "examYears": [],
+    "chapter": "导论",
+    "level": "B",
+    "linkedCardIds": [
+      "K0001",
+      "K0002",
+      "K0003",
+      "K0004"
+    ]
+  },
+  {
+    "id": "SQ004",
+    "number": 4,
+    "title": "马克思物质范畴的理论意义？",
+    "pageHint": "P23",
+    "examYears": [
+      "19-20(1)",
+      "19-20(2)",
+      "20-21(1)"
+    ],
+    "chapter": "第一章 世界的物质性及发展规律",
+    "level": "A",
+    "linkedCardIds": [
+      "K0007",
+      "K0009",
+      "K0010",
+      "K0011"
+    ]
+  },
+  {
+    "id": "SQ005",
+    "number": 5,
+    "title": "物质对意识决定作用的表现？",
+    "pageHint": "P25",
+    "examYears": [],
+    "chapter": "第一章 世界的物质性及发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0013",
+      "K0014",
+      "K0007",
+      "K0009"
+    ]
+  },
+  {
+    "id": "SQ006",
+    "number": 6,
+    "title": "意识对物质能动作用的表现？",
+    "pageHint": "P26",
+    "examYears": [
+      "18-19(2)"
+    ],
+    "chapter": "第一章 世界的物质性及发展规律",
+    "level": "A",
+    "linkedCardIds": [
+      "K0014",
+      "K0013",
+      "K0007",
+      "K0009"
+    ]
+  },
+  {
+    "id": "SQ007",
+    "number": 7,
+    "title": "如何处理好主观能动性和客观规律性的关系？",
+    "pageHint": "P27",
+    "examYears": [],
+    "chapter": "第一章 世界的物质性及发展规律",
+    "level": "B",
+    "linkedCardIds": []
+  },
+  {
+    "id": "SQ008",
+    "number": 8,
+    "title": "人工智能是否能真的具有人的意识？",
+    "pageHint": "P28",
+    "examYears": [],
+    "chapter": "第一章 世界的物质性及发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0013",
+      "K0014",
+      "K0074",
+      "K0075"
+    ]
+  },
+  {
+    "id": "SQ009",
+    "number": 9,
+    "title": "什么是世界的物质统一性？",
+    "pageHint": "P30",
+    "examYears": [],
+    "chapter": "第一章 世界的物质性及发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0007",
+      "K0009",
+      "K0010",
+      "K0011"
+    ]
+  },
+  {
+    "id": "SQ010",
+    "number": 10,
+    "title": "联系的特点？",
+    "pageHint": "P32",
+    "examYears": [],
+    "chapter": "第一章 世界的物质性及发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0019",
+      "K0018",
+      "K0006",
+      "K0007"
+    ]
+  },
+  {
+    "id": "SQ011",
+    "number": 11,
+    "title": "矛盾同一性和斗争性的表现？",
+    "pageHint": "P35",
+    "examYears": [],
+    "chapter": "第一章 世界的物质性及发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0023",
+      "K0024",
+      "K0025",
+      "K0070"
+    ]
+  },
+  {
+    "id": "SQ012",
+    "number": 12,
+    "title": "量变和质变的辩证关系？",
+    "pageHint": "P38",
+    "examYears": [],
+    "chapter": "第一章 世界的物质性及发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0028"
+    ]
+  },
+  {
+    "id": "SQ013",
+    "number": 13,
+    "title": "什么是唯物辩证法的否定观？",
+    "pageHint": "P39",
+    "examYears": [
+      "20-21(2)"
+    ],
+    "chapter": "第一章 世界的物质性及发展规律",
+    "level": "A",
+    "linkedCardIds": [
+      "K0030"
+    ]
+  },
+  {
+    "id": "SQ014",
+    "number": 14,
+    "title": "唯物辩证法的本质特征和认识功能？",
+    "pageHint": "P43",
+    "examYears": [],
+    "chapter": "第一章 世界的物质性及发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0033",
+      "K0203",
+      "K0027",
+      "K0032"
+    ]
+  },
+  {
+    "id": "SQ015",
+    "number": 15,
+    "title": "辩证思维方法有哪些？",
+    "pageHint": "P47",
+    "examYears": [],
+    "chapter": "第一章 世界的物质性及发展规律",
+    "level": "B",
+    "linkedCardIds": []
+  },
+  {
+    "id": "SQ016",
+    "number": 16,
+    "title": "科学实践观创立发展的意义？",
+    "pageHint": "P61",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0036",
+      "K0040",
+      "K0042",
+      "K0053"
+    ]
+  },
+  {
+    "id": "SQ017",
+    "number": 17,
+    "title": "实践的基本特征？",
+    "pageHint": "P62",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0039",
+      "K0036",
+      "K0037",
+      "K0038"
+    ]
+  },
+  {
+    "id": "SQ018",
+    "number": 18,
+    "title": "实践的基本结构？",
+    "pageHint": "P64",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0040",
+      "K0036",
+      "K0037",
+      "K0038"
+    ]
+  },
+  {
+    "id": "SQ019",
+    "number": 19,
+    "title": "实践的形式？",
+    "pageHint": "P65",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0041",
+      "K0036",
+      "K0037",
+      "K0038"
+    ]
+  },
+  {
+    "id": "SQ020",
+    "number": 20,
+    "title": "实践对认识的决定作用？",
+    "pageHint": "P67",
+    "examYears": [
+      "18-19(1)",
+      "18- 19(2)"
+    ],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "A",
+    "linkedCardIds": [
+      "K0042",
+      "K0037",
+      "K0036",
+      "K0053"
+    ]
+  },
+  {
+    "id": "SQ021",
+    "number": 21,
+    "title": "感性认识与理性认识的辩证统一？",
+    "pageHint": "P74",
+    "examYears": [
+      "20- 21(2)"
+    ],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "A",
+    "linkedCardIds": [
+      "K0047",
+      "K0027",
+      "K0032",
+      "K0033"
+    ]
+  },
+  {
+    "id": "SQ022",
+    "number": 22,
+    "title": "感性认识上升到理性认识的条件？",
+    "pageHint": "P75",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0051",
+      "K0027",
+      "K0032",
+      "K0033"
+    ]
+  },
+  {
+    "id": "SQ023",
+    "number": 23,
+    "title": "认识到实践的必要性和重要性？",
+    "pageHint": "P75",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0053",
+      "K0036",
+      "K0042",
+      "K0027"
+    ]
+  },
+  {
+    "id": "SQ024",
+    "number": 24,
+    "title": "什么是真理的客观性？",
+    "pageHint": "P80",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0054",
+      "K0055",
+      "K0056",
+      "K0057"
+    ]
+  },
+  {
+    "id": "SQ025",
+    "number": 25,
+    "title": "什么是真理的绝对性和相对性？",
+    "pageHint": "P81",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0054",
+      "K0055",
+      "K0056",
+      "K0057"
+    ]
+  },
+  {
+    "id": "SQ026",
+    "number": 26,
+    "title": "真理和谬误的对立统一？",
+    "pageHint": "P84",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0054",
+      "K0055",
+      "K0056",
+      "K0057"
+    ]
+  },
+  {
+    "id": "SQ027",
+    "number": 27,
+    "title": "为什么实践是检验真理的唯一标准 ？",
+    "pageHint": "P87",
+    "examYears": [
+      "19-20(2)"
+    ],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "A",
+    "linkedCardIds": [
+      "K0057",
+      "K0064",
+      "K0042",
+      "K0053"
+    ]
+  },
+  {
+    "id": "SQ028",
+    "number": 28,
+    "title": "什么是实践标准的确定性和不确定性？",
+    "pageHint": "P89",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0036",
+      "K0037",
+      "K0038",
+      "K0039"
+    ]
+  },
+  {
+    "id": "SQ029",
+    "number": 29,
+    "title": "价值的基本特征？",
+    "pageHint": "P91",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0059",
+      "K0005",
+      "K0054",
+      "K0060"
+    ]
+  },
+  {
+    "id": "SQ030",
+    "number": 30,
+    "title": "价值评价的特点？",
+    "pageHint": "P92",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0062",
+      "K0059",
+      "K0212",
+      "K0005"
+    ]
+  },
+  {
+    "id": "SQ031",
+    "number": 31,
+    "title": "真理与价值的关系？",
+    "pageHint": "P96",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0059",
+      "K0054",
+      "K0064",
+      "K0005"
+    ]
+  },
+  {
+    "id": "SQ032",
+    "number": 32,
+    "title": "认识世界和改造世界的关系？",
+    "pageHint": "P97",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0027",
+      "K0032",
+      "K0033",
+      "K0036"
+    ]
+  },
+  {
+    "id": "SQ033",
+    "number": 33,
+    "title": "客观世界与主观世界的辩证关系？",
+    "pageHint": "P98",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0067"
+    ]
+  },
+  {
+    "id": "SQ034",
+    "number": 34,
+    "title": "理论创新与实践创新的关系？",
+    "pageHint": "P106",
+    "examYears": [],
+    "chapter": "第二章 实践与认识及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0069",
+      "K0209",
+      "K0036",
+      "K0037"
+    ]
+  },
+  {
+    "id": "SQ035",
+    "number": 35,
+    "title": "为什么说生产方式是社会历史发展的决定力量？",
+    "pageHint": "P113",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0072",
+      "K0002",
+      "K0018",
+      "K0025"
+    ]
+  },
+  {
+    "id": "SQ036",
+    "number": 36,
+    "title": "社会存在和社会意识的辩证关系？",
+    "pageHint": "P116",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0074",
+      "K0073",
+      "K0013",
+      "K0014"
+    ]
+  },
+  {
+    "id": "SQ037",
+    "number": 37,
+    "title": "社会意识独立性的表现？",
+    "pageHint": "P117",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0074",
+      "K0013",
+      "K0014",
+      "K0075"
+    ]
+  },
+  {
+    "id": "SQ038",
+    "number": 38,
+    "title": "文化对社会发展的重要作用？",
+    "pageHint": "P119",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0095",
+      "K0002",
+      "K0018",
+      "K0025"
+    ]
+  },
+  {
+    "id": "SQ039",
+    "number": 39,
+    "title": "生产力的基本要素？",
+    "pageHint": "P121",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0078",
+      "K0080",
+      "K0070",
+      "K0073"
+    ]
+  },
+  {
+    "id": "SQ040",
+    "number": 40,
+    "title": "生产力和生产关系的关系？",
+    "pageHint": "P123",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0080",
+      "K0079",
+      "K0078",
+      "K0070"
+    ]
+  },
+  {
+    "id": "SQ041",
+    "number": 41,
+    "title": "经济基础和上层建筑的辩证统一关系？",
+    "pageHint": "P127",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0082",
+      "K0081",
+      "K0087",
+      "K0070"
+    ]
+  },
+  {
+    "id": "SQ042",
+    "number": 42,
+    "title": "人民的历史选择性？",
+    "pageHint": "P135",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": []
+  },
+  {
+    "id": "SQ043",
+    "number": 43,
+    "title": "社会基本矛盾在历史发展中的作用？",
+    "pageHint": "P138",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0089",
+      "K0070",
+      "K0086",
+      "K0025"
+    ]
+  },
+  {
+    "id": "SQ044",
+    "number": 44,
+    "title": "社会革命的地位和实质？",
+    "pageHint": "P147",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0092"
+    ]
+  },
+  {
+    "id": "SQ045",
+    "number": 45,
+    "title": "社会革命在社会发展中的重要作用？",
+    "pageHint": "P148",
+    "examYears": [
+      "18-19(1)"
+    ],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "A",
+    "linkedCardIds": [
+      "K0002",
+      "K0018",
+      "K0025",
+      "K0036"
+    ]
+  },
+  {
+    "id": "SQ046",
+    "number": 46,
+    "title": "科技革命对社会发展的作用？",
+    "pageHint": "P151",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0002",
+      "K0018",
+      "K0025",
+      "K0036"
+    ]
+  },
+  {
+    "id": "SQ047",
+    "number": 47,
+    "title": "唯物史观坚持的原则？",
+    "pageHint": "P154",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": []
+  },
+  {
+    "id": "SQ048",
+    "number": 48,
+    "title": "人民群众在创造历史中的决定作用？",
+    "pageHint": "P157",
+    "examYears": [],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0098",
+      "K0084",
+      "K0093",
+      "K0099"
+    ]
+  },
+  {
+    "id": "SQ049",
+    "number": 49,
+    "title": "马克思主义群众路线的内容？",
+    "pageHint": "P159",
+    "examYears": [
+      "19-20(1)"
+    ],
+    "chapter": "第三章 人类社会及其发展规律",
+    "level": "A",
+    "linkedCardIds": [
+      "K0202",
+      "K0001",
+      "K0002",
+      "K0003"
+    ]
+  },
+  {
+    "id": "SQ050",
+    "number": 50,
+    "title": "商品使用价值和价值对立统一关系？",
+    "pageHint": "P170",
+    "examYears": [],
+    "chapter": "第四章 资本主义的本质及规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0059",
+      "K0107",
+      "K0137",
+      "K0148"
+    ]
+  },
+  {
+    "id": "SQ051",
+    "number": 51,
+    "title": "劳动二重性的对立统一关系？",
+    "pageHint": "P170",
+    "examYears": [
+      "20-21(1)"
+    ],
+    "chapter": "第四章 资本主义的本质及规律",
+    "level": "A",
+    "linkedCardIds": [
+      "K0105",
+      "K0107",
+      "K0111",
+      "K0112"
+    ]
+  },
+  {
+    "id": "SQ052",
+    "number": 52,
+    "title": "货币的基本职能？",
+    "pageHint": "P173",
+    "examYears": [],
+    "chapter": "第四章 资本主义的本质及规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0201"
+    ]
+  },
+  {
+    "id": "SQ053",
+    "number": 53,
+    "title": "价值规律的表现和对市场配置资源的作用？",
+    "pageHint": "P174",
+    "examYears": [
+      "19-20(1)",
+      "20-21(1)"
+    ],
+    "chapter": "第四章 资本主义的本质及规律",
+    "level": "A",
+    "linkedCardIds": [
+      "K0059",
+      "K0109",
+      "K0110",
+      "K0139"
+    ]
+  },
+  {
+    "id": "SQ054",
+    "number": 54,
+    "title": "商品经济的基本矛盾？",
+    "pageHint": "P176",
+    "examYears": [],
+    "chapter": "第四章 资本主义的本质及规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0112",
+      "K0142",
+      "K0114",
+      "K0143"
+    ]
+  },
+  {
+    "id": "SQ055",
+    "number": 55,
+    "title": "马克思劳动价值论的理论实践意义？",
+    "pageHint": "P178",
+    "examYears": [],
+    "chapter": "第四章 资本主义的本质及规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0059",
+      "K0114",
+      "K0064",
+      "K0107"
+    ]
+  },
+  {
+    "id": "SQ056",
+    "number": 56,
+    "title": "如何深化对马克思劳动价值论的认识？",
+    "pageHint": "P181",
+    "examYears": [],
+    "chapter": "第四章 资本主义的本质及规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0059",
+      "K0115",
+      "K0144",
+      "K0107"
+    ]
+  },
+  {
+    "id": "SQ057",
+    "number": 57,
+    "title": "劳动力成为商品的基本条件？",
+    "pageHint": "P188",
+    "examYears": [],
+    "chapter": "第四章 资本主义的本质及规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0152",
+      "K0107",
+      "K0112",
+      "K0116"
+    ]
+  },
+  {
+    "id": "SQ058",
+    "number": 58,
+    "title": "劳动力商品的特点？",
+    "pageHint": "P189",
+    "examYears": [
+      "18-19(2)",
+      "20-21(2)"
+    ],
+    "chapter": "第四章 资本主义的本质及规律",
+    "level": "A",
+    "linkedCardIds": [
+      "K0107",
+      "K0112",
+      "K0116",
+      "K0131"
+    ]
+  },
+  {
+    "id": "SQ059",
+    "number": 59,
+    "title": "资本主义生产过程的二重性？",
+    "pageHint": "P192",
+    "examYears": [],
+    "chapter": "第四章 资本主义的本质及规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0119",
+      "K0120",
+      "K0121",
+      "K0122"
+    ]
+  },
+  {
+    "id": "SQ060",
+    "number": 60,
+    "title": "资本循环的过程和产业资本运动的条件 ？",
+    "pageHint": "P201",
+    "examYears": [
+      "19-20(2)"
+    ],
+    "chapter": "第四章 资本主义的本质及规律",
+    "level": "A",
+    "linkedCardIds": [
+      "K0121",
+      "K0122",
+      "K0119",
+      "K0120"
+    ]
+  },
+  {
+    "id": "SQ061",
+    "number": 61,
+    "title": "资本主义经济危机爆发的根本原因？",
+    "pageHint": "P208",
+    "examYears": [],
+    "chapter": "第四章 资本主义的本质及规律",
+    "level": "B",
+    "linkedCardIds": [
+      "K0119",
+      "K0120",
+      "K0121",
+      "K0122"
+    ]
+  }
+]

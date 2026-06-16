@@ -1,0 +1,1301 @@
+{
+  "totalParagraphs": 1251,
+  "coveredParagraphs": 1251,
+  "uncoveredParagraphs": [],
+  "cards": [
+    {
+      "cardId": "K0001",
+      "title": "一、什么是马克思主义",
+      "sourceStart": 0,
+      "sourceEnd": 3
+    },
+    {
+      "cardId": "K0002",
+      "title": "二、马克思主义的创立与发展",
+      "sourceStart": 4,
+      "sourceEnd": 7
+    },
+    {
+      "cardId": "K0003",
+      "title": "三、马克思主义的基本特征",
+      "sourceStart": 8,
+      "sourceEnd": 11
+    },
+    {
+      "cardId": "K0004",
+      "title": "马克思主义的基本特征",
+      "sourceStart": 12,
+      "sourceEnd": 16
+    },
+    {
+      "cardId": "K0005",
+      "title": "马克思主义的当代价值",
+      "sourceStart": 17,
+      "sourceEnd": 21
+    },
+    {
+      "cardId": "K0006",
+      "title": "大学生该如何学习马克思主义理论",
+      "sourceStart": 22,
+      "sourceEnd": 27
+    },
+    {
+      "cardId": "K0007",
+      "title": "一、世界的多样性与物质统一性（唯物论）",
+      "sourceStart": 28,
+      "sourceEnd": 42
+    },
+    {
+      "cardId": "K0008",
+      "title": "补充：",
+      "sourceStart": 43,
+      "sourceEnd": 44
+    },
+    {
+      "cardId": "K0009",
+      "title": "物质的范畴",
+      "sourceStart": 45,
+      "sourceEnd": 48
+    },
+    {
+      "cardId": "K0010",
+      "title": "物质的存在方式",
+      "sourceStart": 49,
+      "sourceEnd": 55
+    },
+    {
+      "cardId": "K0011",
+      "title": "物质世界的二重化",
+      "sourceStart": 56,
+      "sourceEnd": 60
+    },
+    {
+      "cardId": "K0012",
+      "title": "马克思主义的物质范畴的理论意义",
+      "sourceStart": 61,
+      "sourceEnd": 65
+    },
+    {
+      "cardId": "K0013",
+      "title": "物质对意识决定作用的表现",
+      "sourceStart": 66,
+      "sourceEnd": 69
+    },
+    {
+      "cardId": "K0014",
+      "title": "意识对物质能动作用的表现23简答题",
+      "sourceStart": 70,
+      "sourceEnd": 74
+    },
+    {
+      "cardId": "K0015",
+      "title": "主观能动性和客观规律性的关系（辩证统一）",
+      "sourceStart": 75,
+      "sourceEnd": 79
+    },
+    {
+      "cardId": "K0016",
+      "title": "人工智能无法取代人类智能",
+      "sourceStart": 80,
+      "sourceEnd": 84
+    },
+    {
+      "cardId": "K0017",
+      "title": "世界的物质统一性（是马克思主义哲学的基石）",
+      "sourceStart": 85,
+      "sourceEnd": 88
+    },
+    {
+      "cardId": "K0018",
+      "title": "二、事物的普遍联系和变化发展（唯物辩证法）",
+      "sourceStart": 89,
+      "sourceEnd": 103
+    },
+    {
+      "cardId": "K0019",
+      "title": "联系的特点",
+      "sourceStart": 104,
+      "sourceEnd": 108
+    },
+    {
+      "cardId": "K0020",
+      "title": "新事物和旧事物的概念",
+      "sourceStart": 109,
+      "sourceEnd": 111
+    },
+    {
+      "cardId": "K0021",
+      "title": "新事物必然战胜旧事物的原因",
+      "sourceStart": 112,
+      "sourceEnd": 114
+    },
+    {
+      "cardId": "K0022",
+      "title": "对立统一规律（根本规律）",
+      "sourceStart": 115,
+      "sourceEnd": 116
+    },
+    {
+      "cardId": "K0023",
+      "title": "矛盾的同一性和斗争性（矛盾的基本属性）",
+      "sourceStart": 117,
+      "sourceEnd": 125
+    },
+    {
+      "cardId": "K0024",
+      "title": "矛盾的普遍性和特殊性（矛盾问题的精髓）",
+      "sourceStart": 126,
+      "sourceEnd": 134
+    },
+    {
+      "cardId": "K0025",
+      "title": "矛盾的不平衡发展原理",
+      "sourceStart": 135,
+      "sourceEnd": 139
+    },
+    {
+      "cardId": "K0026",
+      "title": "概念：",
+      "sourceStart": 140,
+      "sourceEnd": 153
+    },
+    {
+      "cardId": "K0027",
+      "title": "认识量的意义：",
+      "sourceStart": 154,
+      "sourceEnd": 162
+    },
+    {
+      "cardId": "K0028",
+      "title": "量变和质变的辩证关系",
+      "sourceStart": 163,
+      "sourceEnd": 166
+    },
+    {
+      "cardId": "K0029",
+      "title": "肯定因素：维持现存事物存在的因素",
+      "sourceStart": 167,
+      "sourceEnd": 171
+    },
+    {
+      "cardId": "K0030",
+      "title": "唯物辩证法的否定观",
+      "sourceStart": 172,
+      "sourceEnd": 176
+    },
+    {
+      "cardId": "K0031",
+      "title": "事物的辩证否定过程",
+      "sourceStart": 177,
+      "sourceEnd": 182
+    },
+    {
+      "cardId": "K0032",
+      "title": "三、唯物辩证法是认识世界和改造世界的根本方法",
+      "sourceStart": 183,
+      "sourceEnd": 184
+    },
+    {
+      "cardId": "K0033",
+      "title": "唯物辩证法的本质特征和认识功能",
+      "sourceStart": 185,
+      "sourceEnd": 190
+    },
+    {
+      "cardId": "K0034",
+      "title": "增强思维能力",
+      "sourceStart": 191,
+      "sourceEnd": 197
+    },
+    {
+      "cardId": "K0035",
+      "title": "如何提高辩证思维能力",
+      "sourceStart": 198,
+      "sourceEnd": 201
+    },
+    {
+      "cardId": "K0036",
+      "title": "实践与认识及其发展规律（认识论）",
+      "sourceStart": 202,
+      "sourceEnd": 204
+    },
+    {
+      "cardId": "K0037",
+      "title": "科学实践观的意义+",
+      "sourceStart": 205,
+      "sourceEnd": 210
+    },
+    {
+      "cardId": "K0038",
+      "title": "实践的本质",
+      "sourceStart": 211,
+      "sourceEnd": 212
+    },
+    {
+      "cardId": "K0039",
+      "title": "实践的基本特征24简答题",
+      "sourceStart": 213,
+      "sourceEnd": 216
+    },
+    {
+      "cardId": "K0040",
+      "title": "实践的基本结构",
+      "sourceStart": 217,
+      "sourceEnd": 222
+    },
+    {
+      "cardId": "K0041",
+      "title": "实践的形式",
+      "sourceStart": 223,
+      "sourceEnd": 226
+    },
+    {
+      "cardId": "K0042",
+      "title": "实践对认识的决定作用23简答题",
+      "sourceStart": 227,
+      "sourceEnd": 231
+    },
+    {
+      "cardId": "K0043",
+      "title": "认识的本质与过程",
+      "sourceStart": 232,
+      "sourceEnd": 238
+    },
+    {
+      "cardId": "K0044",
+      "title": "辩证唯物主义认识论突出特点：",
+      "sourceStart": 239,
+      "sourceEnd": 241
+    },
+    {
+      "cardId": "K0045",
+      "title": "认识的本质",
+      "sourceStart": 242,
+      "sourceEnd": 243
+    },
+    {
+      "cardId": "K0046",
+      "title": "认识具有反映特性和创造特性",
+      "sourceStart": 244,
+      "sourceEnd": 247
+    },
+    {
+      "cardId": "K0047",
+      "title": "感性认识与理性认识",
+      "sourceStart": 248,
+      "sourceEnd": 267
+    },
+    {
+      "cardId": "K0048",
+      "title": "认识的过程",
+      "sourceStart": 268,
+      "sourceEnd": 270
+    },
+    {
+      "cardId": "K0049",
+      "title": "认识过程的两次飞跃",
+      "sourceStart": 271,
+      "sourceEnd": 276
+    },
+    {
+      "cardId": "K0050",
+      "title": "感性认识和理性认识辩证统一关系",
+      "sourceStart": 277,
+      "sourceEnd": 280
+    },
+    {
+      "cardId": "K0051",
+      "title": "感性认识上升到理性认识的条件",
+      "sourceStart": 281,
+      "sourceEnd": 283
+    },
+    {
+      "cardId": "K0052",
+      "title": "认识过程中的影响因素（理性和非理性因素）",
+      "sourceStart": 284,
+      "sourceEnd": 290
+    },
+    {
+      "cardId": "K0053",
+      "title": "从认识到实践的必要性和重要性",
+      "sourceStart": 291,
+      "sourceEnd": 294
+    },
+    {
+      "cardId": "K0054",
+      "title": "二、真理与价值",
+      "sourceStart": 295,
+      "sourceEnd": 298
+    },
+    {
+      "cardId": "K0055",
+      "title": "真理的客观性、绝对性和相对性",
+      "sourceStart": 299,
+      "sourceEnd": 309
+    },
+    {
+      "cardId": "K0056",
+      "title": "真理与谬误对立统一",
+      "sourceStart": 310,
+      "sourceEnd": 313
+    },
+    {
+      "cardId": "K0057",
+      "title": "实践是检验真理的唯一标准",
+      "sourceStart": 314,
+      "sourceEnd": 320
+    },
+    {
+      "cardId": "K0058",
+      "title": "实践标准的确定性与不确定性",
+      "sourceStart": 321,
+      "sourceEnd": 323
+    },
+    {
+      "cardId": "K0059",
+      "title": "价值",
+      "sourceStart": 324,
+      "sourceEnd": 325
+    },
+    {
+      "cardId": "K0060",
+      "title": "价值的基本特性",
+      "sourceStart": 326,
+      "sourceEnd": 330
+    },
+    {
+      "cardId": "K0061",
+      "title": "核心价值观",
+      "sourceStart": 331,
+      "sourceEnd": 334
+    },
+    {
+      "cardId": "K0062",
+      "title": "价值评价的特点",
+      "sourceStart": 335,
+      "sourceEnd": 339
+    },
+    {
+      "cardId": "K0063",
+      "title": "实践的尺度",
+      "sourceStart": 340,
+      "sourceEnd": 343
+    },
+    {
+      "cardId": "K0064",
+      "title": "真理与价值在实践中的辩证统一关系",
+      "sourceStart": 344,
+      "sourceEnd": 347
+    },
+    {
+      "cardId": "K0065",
+      "title": "三、认识世界和改造世界",
+      "sourceStart": 348,
+      "sourceEnd": 350
+    },
+    {
+      "cardId": "K0066",
+      "title": "认识世界和改造世界的辩证关系",
+      "sourceStart": 351,
+      "sourceEnd": 354
+    },
+    {
+      "cardId": "K0067",
+      "title": "客观世界与主观世界的辩证关系",
+      "sourceStart": 355,
+      "sourceEnd": 358
+    },
+    {
+      "cardId": "K0068",
+      "title": "一切从实际出发，实事求是",
+      "sourceStart": 359,
+      "sourceEnd": 361
+    },
+    {
+      "cardId": "K0069",
+      "title": "理论创新与实践创新的关系",
+      "sourceStart": 362,
+      "sourceEnd": 365
+    },
+    {
+      "cardId": "K0070",
+      "title": "社会基本矛盾",
+      "sourceStart": 366,
+      "sourceEnd": 369
+    },
+    {
+      "cardId": "K0071",
+      "title": "一、人类社会的存在与发展",
+      "sourceStart": 370,
+      "sourceEnd": 371
+    },
+    {
+      "cardId": "K0072",
+      "title": "生产方式是社会历史发展的决定力量",
+      "sourceStart": 372,
+      "sourceEnd": 375
+    },
+    {
+      "cardId": "K0073",
+      "title": "社会存在",
+      "sourceStart": 376,
+      "sourceEnd": 383
+    },
+    {
+      "cardId": "K0074",
+      "title": "社会意识",
+      "sourceStart": 384,
+      "sourceEnd": 393
+    },
+    {
+      "cardId": "K0075",
+      "title": "社会存在决定社会意识",
+      "sourceStart": 394,
+      "sourceEnd": 398
+    },
+    {
+      "cardId": "K0076",
+      "title": "社会意识反作用于社会存在（社会意识的相对独立性）",
+      "sourceStart": 399,
+      "sourceEnd": 402
+    },
+    {
+      "cardId": "K0077",
+      "title": "社会存在与社会意识辩证关系的方法论意义",
+      "sourceStart": 403,
+      "sourceEnd": 407
+    },
+    {
+      "cardId": "K0078",
+      "title": "生产力包括：",
+      "sourceStart": 408,
+      "sourceEnd": 412
+    },
+    {
+      "cardId": "K0079",
+      "title": "生产关系包括：",
+      "sourceStart": 413,
+      "sourceEnd": 418
+    },
+    {
+      "cardId": "K0080",
+      "title": "生产力和生产关系的关系",
+      "sourceStart": 419,
+      "sourceEnd": 430
+    },
+    {
+      "cardId": "K0081",
+      "title": "经济基础与上层建筑的矛盾运动及规律",
+      "sourceStart": 431,
+      "sourceEnd": 436
+    },
+    {
+      "cardId": "K0082",
+      "title": "经济基础和上层建筑的辩证统一关系",
+      "sourceStart": 437,
+      "sourceEnd": 444
+    },
+    {
+      "cardId": "K0083",
+      "title": "交往及其作用",
+      "sourceStart": 445,
+      "sourceEnd": 451
+    },
+    {
+      "cardId": "K0084",
+      "title": "人们的历史选择性的含义",
+      "sourceStart": 452,
+      "sourceEnd": 455
+    },
+    {
+      "cardId": "K0085",
+      "title": "社会基本结构：",
+      "sourceStart": 456,
+      "sourceEnd": 461
+    },
+    {
+      "cardId": "K0086",
+      "title": "社会基本矛盾：",
+      "sourceStart": 462,
+      "sourceEnd": 464
+    },
+    {
+      "cardId": "K0087",
+      "title": "社会形态（经济基础+上层建筑）：",
+      "sourceStart": 465,
+      "sourceEnd": 468
+    },
+    {
+      "cardId": "K0088",
+      "title": "社会发展的六个动力",
+      "sourceStart": 469,
+      "sourceEnd": 480
+    },
+    {
+      "cardId": "K0089",
+      "title": "社会基本矛盾在历史发展中的作用",
+      "sourceStart": 481,
+      "sourceEnd": 487
+    },
+    {
+      "cardId": "K0090",
+      "title": "社会主要矛盾",
+      "sourceStart": 488,
+      "sourceEnd": 492
+    },
+    {
+      "cardId": "K0091",
+      "title": "阶级斗争、社会革命在社会发展中的作用",
+      "sourceStart": 493,
+      "sourceEnd": 505
+    },
+    {
+      "cardId": "K0092",
+      "title": "社会革命的地位和实质",
+      "sourceStart": 506,
+      "sourceEnd": 508
+    },
+    {
+      "cardId": "K0093",
+      "title": "社会革命在社会发展中的作用",
+      "sourceStart": 509,
+      "sourceEnd": 512
+    },
+    {
+      "cardId": "K0094",
+      "title": "科学技术在社会发展中的作用23简答题",
+      "sourceStart": 513,
+      "sourceEnd": 519
+    },
+    {
+      "cardId": "K0095",
+      "title": "文化对社会发展的重要作用",
+      "sourceStart": 520,
+      "sourceEnd": 524
+    },
+    {
+      "cardId": "K0096",
+      "title": "注意区分：",
+      "sourceStart": 525,
+      "sourceEnd": 529
+    },
+    {
+      "cardId": "K0097",
+      "title": "唯物史观考察历史创造者问题的方法论原则",
+      "sourceStart": 530,
+      "sourceEnd": 537
+    },
+    {
+      "cardId": "K0098",
+      "title": "人民群众在创造历史过程中的决定作用",
+      "sourceStart": 538,
+      "sourceEnd": 543
+    },
+    {
+      "cardId": "K0099",
+      "title": "马克思主义群众观点的基本内容",
+      "sourceStart": 544,
+      "sourceEnd": 548
+    },
+    {
+      "cardId": "K0100",
+      "title": "群众路线是群众观点的具体应用",
+      "sourceStart": 549,
+      "sourceEnd": 554
+    },
+    {
+      "cardId": "K0101",
+      "title": "坚持党的群众路线的重要意义：",
+      "sourceStart": 555,
+      "sourceEnd": 559
+    },
+    {
+      "cardId": "K0102",
+      "title": "个人在社会历史中的作用",
+      "sourceStart": 560,
+      "sourceEnd": 563
+    },
+    {
+      "cardId": "K0103",
+      "title": "群众、阶级、政党、领袖的关系",
+      "sourceStart": 564,
+      "sourceEnd": 568
+    },
+    {
+      "cardId": "K0104",
+      "title": "商品的二因素",
+      "sourceStart": 569,
+      "sourceEnd": 577
+    },
+    {
+      "cardId": "K0105",
+      "title": "劳动的二重性",
+      "sourceStart": 578,
+      "sourceEnd": 584
+    },
+    {
+      "cardId": "K0106",
+      "title": "价值规定：",
+      "sourceStart": 585,
+      "sourceEnd": 589
+    },
+    {
+      "cardId": "K0107",
+      "title": "决定商品价值量是社会必要劳动时间",
+      "sourceStart": 590,
+      "sourceEnd": 592
+    },
+    {
+      "cardId": "K0108",
+      "title": "货币的职能",
+      "sourceStart": 593,
+      "sourceEnd": 596
+    },
+    {
+      "cardId": "K0109",
+      "title": "价值规律在市场配置资源过程中的作用",
+      "sourceStart": 597,
+      "sourceEnd": 600
+    },
+    {
+      "cardId": "K0110",
+      "title": "价值规律自发调节经济活动的消极后果",
+      "sourceStart": 601,
+      "sourceEnd": 604
+    },
+    {
+      "cardId": "K0111",
+      "title": "私人劳动与社会劳动",
+      "sourceStart": 605,
+      "sourceEnd": 610
+    },
+    {
+      "cardId": "K0112",
+      "title": "私有制商品经济的基本矛盾：私人劳动与社会劳动",
+      "sourceStart": 611,
+      "sourceEnd": 617
+    },
+    {
+      "cardId": "K0113",
+      "title": "不太重要",
+      "sourceStart": 618,
+      "sourceEnd": 622
+    },
+    {
+      "cardId": "K0114",
+      "title": "马克思劳动价值论的理论和实践意义24简答题",
+      "sourceStart": 623,
+      "sourceEnd": 626
+    },
+    {
+      "cardId": "K0115",
+      "title": "在当代条件下深化对马克思劳动价值论的认识",
+      "sourceStart": 627,
+      "sourceEnd": 630
+    },
+    {
+      "cardId": "K0116",
+      "title": "劳动力成为商品的条件",
+      "sourceStart": 631,
+      "sourceEnd": 634
+    },
+    {
+      "cardId": "K0117",
+      "title": "劳动力的价值的三个部分",
+      "sourceStart": 635,
+      "sourceEnd": 638
+    },
+    {
+      "cardId": "K0118",
+      "title": "具有使用价值和价值：",
+      "sourceStart": 639,
+      "sourceEnd": 642
+    },
+    {
+      "cardId": "K0119",
+      "title": "资本主义生产过程的二重性",
+      "sourceStart": 643,
+      "sourceEnd": 646
+    },
+    {
+      "cardId": "K0120",
+      "title": "资本主义劳动过程的特点",
+      "sourceStart": 647,
+      "sourceEnd": 651
+    },
+    {
+      "cardId": "K0121",
+      "title": "资本循环",
+      "sourceStart": 652,
+      "sourceEnd": 660
+    },
+    {
+      "cardId": "K0122",
+      "title": "产业资本运动的条件",
+      "sourceStart": 661,
+      "sourceEnd": 663
+    },
+    {
+      "cardId": "K0123",
+      "title": "剩余价值理论的意义",
+      "sourceStart": 664,
+      "sourceEnd": 667
+    },
+    {
+      "cardId": "K0124",
+      "title": "资本主义危机爆发的根本原因（资本主义的基本矛盾）",
+      "sourceStart": 668,
+      "sourceEnd": 669
+    },
+    {
+      "cardId": "K0125",
+      "title": "具体表现：",
+      "sourceStart": 670,
+      "sourceEnd": 672
+    },
+    {
+      "cardId": "K0126",
+      "title": "资本主义政治制度的阶级和历史局限性",
+      "sourceStart": 673,
+      "sourceEnd": 678
+    },
+    {
+      "cardId": "K0127",
+      "title": "资本主义意识形态的本质",
+      "sourceStart": 679,
+      "sourceEnd": 681
+    },
+    {
+      "cardId": "K0128",
+      "title": "商品经济的形成和发展",
+      "sourceStart": 682,
+      "sourceEnd": 691
+    },
+    {
+      "cardId": "K0129",
+      "title": "商品经济产生的历史条件",
+      "sourceStart": 692,
+      "sourceEnd": 699
+    },
+    {
+      "cardId": "K0130",
+      "title": "商品的二因素",
+      "sourceStart": 700,
+      "sourceEnd": 717
+    },
+    {
+      "cardId": "K0131",
+      "title": "生产商品的劳动的二重性",
+      "sourceStart": 718,
+      "sourceEnd": 726
+    },
+    {
+      "cardId": "K0132",
+      "title": "劳动的二重性决定了商品的二因素",
+      "sourceStart": 727,
+      "sourceEnd": 734
+    },
+    {
+      "cardId": "K0133",
+      "title": "社会必要劳动时间",
+      "sourceStart": 735,
+      "sourceEnd": 737
+    },
+    {
+      "cardId": "K0134",
+      "title": "个别劳动时间是指个别商品生产者生产商品所耗费的时间",
+      "sourceStart": 738,
+      "sourceEnd": 739
+    },
+    {
+      "cardId": "K0135",
+      "title": "劳动生产率",
+      "sourceStart": 740,
+      "sourceEnd": 746
+    },
+    {
+      "cardId": "K0136",
+      "title": "简单劳动与复杂劳动",
+      "sourceStart": 747,
+      "sourceEnd": 749
+    },
+    {
+      "cardId": "K0137",
+      "title": "商品价值形式的发展经历了四个阶段",
+      "sourceStart": 750,
+      "sourceEnd": 756
+    },
+    {
+      "cardId": "K0138",
+      "title": "货币的职能：",
+      "sourceStart": 757,
+      "sourceEnd": 767
+    },
+    {
+      "cardId": "K0139",
+      "title": "价值规律的内容及其作用",
+      "sourceStart": 768,
+      "sourceEnd": 770
+    },
+    {
+      "cardId": "K0140",
+      "title": "价值规律在市场配置资源过程中的积极作用",
+      "sourceStart": 771,
+      "sourceEnd": 774
+    },
+    {
+      "cardId": "K0141",
+      "title": "价值规律在自发调节经济活动时的消极作用",
+      "sourceStart": 775,
+      "sourceEnd": 778
+    },
+    {
+      "cardId": "K0142",
+      "title": "以私有制为基础的商品经济的基本矛盾",
+      "sourceStart": 779,
+      "sourceEnd": 782
+    },
+    {
+      "cardId": "K0143",
+      "title": "马克思主义劳动价值论的三条意义",
+      "sourceStart": 783,
+      "sourceEnd": 786
+    },
+    {
+      "cardId": "K0144",
+      "title": "在当代条件下深化对马克思劳动价值论的认识",
+      "sourceStart": 787,
+      "sourceEnd": 790
+    },
+    {
+      "cardId": "K0145",
+      "title": "二、资本主义经济制度（剩余价值理论）",
+      "sourceStart": 791,
+      "sourceEnd": 792
+    },
+    {
+      "cardId": "K0146",
+      "title": "资本的原始积累",
+      "sourceStart": 793,
+      "sourceEnd": 795
+    },
+    {
+      "cardId": "K0147",
+      "title": "回顾，社会存在的结构：",
+      "sourceStart": 796,
+      "sourceEnd": 808
+    },
+    {
+      "cardId": "K0148",
+      "title": "劳动力商品的价值和使用价值",
+      "sourceStart": 809,
+      "sourceEnd": 815
+    },
+    {
+      "cardId": "K0149",
+      "title": "劳动力成为商品是货币转化为资本的条件",
+      "sourceStart": 816,
+      "sourceEnd": 818
+    },
+    {
+      "cardId": "K0150",
+      "title": "简单商品流通公式",
+      "sourceStart": 819,
+      "sourceEnd": 821
+    },
+    {
+      "cardId": "K0151",
+      "title": "资本总公式",
+      "sourceStart": 822,
+      "sourceEnd": 825
+    },
+    {
+      "cardId": "K0152",
+      "title": "劳动力成为商品的基本条件",
+      "sourceStart": 826,
+      "sourceEnd": 830
+    },
+    {
+      "cardId": "K0153",
+      "title": "劳动力的价值包括：",
+      "sourceStart": 831,
+      "sourceEnd": 835
+    },
+    {
+      "cardId": "K0154",
+      "title": "劳动力的使用价值",
+      "sourceStart": 836,
+      "sourceEnd": 839
+    },
+    {
+      "cardId": "K0155",
+      "title": "资本是能够带来剩余价值的价值",
+      "sourceStart": 840,
+      "sourceEnd": 842
+    },
+    {
+      "cardId": "K0156",
+      "title": "资本主义生产过程具有二重性",
+      "sourceStart": 843,
+      "sourceEnd": 846
+    },
+    {
+      "cardId": "K0157",
+      "title": "资本主义生产过程是劳动过程和价值增殖过程的统一",
+      "sourceStart": 847,
+      "sourceEnd": 848
+    },
+    {
+      "cardId": "K0158",
+      "title": "生产物质资料的劳动过程",
+      "sourceStart": 849,
+      "sourceEnd": 858
+    },
+    {
+      "cardId": "K0159",
+      "title": "资本主义生产过程的主要方面",
+      "sourceStart": 859,
+      "sourceEnd": 874
+    },
+    {
+      "cardId": "K0160",
+      "title": "（计算）资本主义商品的价值构成",
+      "sourceStart": 875,
+      "sourceEnd": 876
+    },
+    {
+      "cardId": "K0161",
+      "title": "剩余价值率（资本家对工人的剥削程度）：",
+      "sourceStart": 877,
+      "sourceEnd": 878
+    },
+    {
+      "cardId": "K0162",
+      "title": "补充公式：",
+      "sourceStart": 879,
+      "sourceEnd": 883
+    },
+    {
+      "cardId": "K0163",
+      "title": "例题 1",
+      "sourceStart": 884,
+      "sourceEnd": 897
+    },
+    {
+      "cardId": "K0164",
+      "title": "D.100%",
+      "sourceStart": 898,
+      "sourceEnd": 902
+    },
+    {
+      "cardId": "K0165",
+      "title": "m=120−100=20万元",
+      "sourceStart": 903,
+      "sourceEnd": 904
+    },
+    {
+      "cardId": "K0166",
+      "title": "故剩余价值率计算为：",
+      "sourceStart": 905,
+      "sourceEnd": 906
+    },
+    {
+      "cardId": "K0167",
+      "title": "因此，该企业的剩余价值率为200%",
+      "sourceStart": 907,
+      "sourceEnd": 908
+    },
+    {
+      "cardId": "K0168",
+      "title": "固定资本=40 万元 / 10 年 = 4 万元/年",
+      "sourceStart": 909,
+      "sourceEnd": 915
+    },
+    {
+      "cardId": "K0169",
+      "title": "2） 求资本有机构成",
+      "sourceStart": 916,
+      "sourceEnd": 919
+    },
+    {
+      "cardId": "K0170",
+      "title": "3） 求一年内预付资本的总周转次数",
+      "sourceStart": 920,
+      "sourceEnd": 922
+    },
+    {
+      "cardId": "K0171",
+      "title": "绝对剩余价值",
+      "sourceStart": 923,
+      "sourceEnd": 939
+    },
+    {
+      "cardId": "K0172",
+      "title": "相对剩余价值",
+      "sourceStart": 940,
+      "sourceEnd": 943
+    },
+    {
+      "cardId": "K0173",
+      "title": "超额剩余价值",
+      "sourceStart": 944,
+      "sourceEnd": 946
+    },
+    {
+      "cardId": "K0174",
+      "title": "生产自动化条件下剩余价值的源泉",
+      "sourceStart": 947,
+      "sourceEnd": 948
+    },
+    {
+      "cardId": "K0175",
+      "title": "资本主义再生产：",
+      "sourceStart": 949,
+      "sourceEnd": 957
+    },
+    {
+      "cardId": "K0176",
+      "title": "资本积累的本质",
+      "sourceStart": 958,
+      "sourceEnd": 959
+    },
+    {
+      "cardId": "K0177",
+      "title": "剩余价值的源泉是剩余劳动",
+      "sourceStart": 960,
+      "sourceEnd": 964
+    },
+    {
+      "cardId": "K0178",
+      "title": "资本有机构成",
+      "sourceStart": 965,
+      "sourceEnd": 976
+    },
+    {
+      "cardId": "K0179",
+      "title": "举例（还是卖包子）:",
+      "sourceStart": 977,
+      "sourceEnd": 979
+    },
+    {
+      "cardId": "K0180",
+      "title": "资本的有机构成（c: v）:",
+      "sourceStart": 980,
+      "sourceEnd": 983
+    },
+    {
+      "cardId": "K0181",
+      "title": "资本价值构成=c:v（钱：钱）",
+      "sourceStart": 984,
+      "sourceEnd": 989
+    },
+    {
+      "cardId": "K0182",
+      "title": "资本积累，资本积聚，资本集中",
+      "sourceStart": 990,
+      "sourceEnd": 992
+    },
+    {
+      "cardId": "K0183",
+      "title": "资本积聚",
+      "sourceStart": 993,
+      "sourceEnd": 995
+    },
+    {
+      "cardId": "K0184",
+      "title": "资本集中",
+      "sourceStart": 996,
+      "sourceEnd": 1002
+    },
+    {
+      "cardId": "K0185",
+      "title": "相对过剩人口",
+      "sourceStart": 1003,
+      "sourceEnd": 1019
+    },
+    {
+      "cardId": "K0186",
+      "title": "产业资本的三个阶段",
+      "sourceStart": 1020,
+      "sourceEnd": 1025
+    },
+    {
+      "cardId": "K0187",
+      "title": "产业资本的运动的两个基本前提条件",
+      "sourceStart": 1026,
+      "sourceEnd": 1028
+    },
+    {
+      "cardId": "K0188",
+      "title": "社会再生产的核心问题",
+      "sourceStart": 1029,
+      "sourceEnd": 1034
+    },
+    {
+      "cardId": "K0189",
+      "title": "社会总产品",
+      "sourceStart": 1035,
+      "sourceEnd": 1036
+    },
+    {
+      "cardId": "K0190",
+      "title": "在价值形态上叫社会总价值",
+      "sourceStart": 1037,
+      "sourceEnd": 1041
+    },
+    {
+      "cardId": "K0191",
+      "title": "在物质形态上，根据最终用途划分为",
+      "sourceStart": 1042,
+      "sourceEnd": 1044
+    },
+    {
+      "cardId": "K0192",
+      "title": "社会生产划分为",
+      "sourceStart": 1045,
+      "sourceEnd": 1047
+    },
+    {
+      "cardId": "K0193",
+      "title": "社会再生产的顺利进行，要求",
+      "sourceStart": 1048,
+      "sourceEnd": 1058
+    },
+    {
+      "cardId": "K0194",
+      "title": "工资与剩余价值的分配",
+      "sourceStart": 1059,
+      "sourceEnd": 1062
+    },
+    {
+      "cardId": "K0195",
+      "title": "资本主义工资的形式主要有两种",
+      "sourceStart": 1063,
+      "sourceEnd": 1066
+    },
+    {
+      "cardId": "K0196",
+      "title": "利润",
+      "sourceStart": 1067,
+      "sourceEnd": 1074
+    },
+    {
+      "cardId": "K0197",
+      "title": "生产价格",
+      "sourceStart": 1075,
+      "sourceEnd": 1080
+    },
+    {
+      "cardId": "K0198",
+      "title": "剩余价值理论的意义",
+      "sourceStart": 1081,
+      "sourceEnd": 1083
+    },
+    {
+      "cardId": "K0199",
+      "title": "揭示了商品经济和社会化生产的一般规律",
+      "sourceStart": 1084,
+      "sourceEnd": 1090
+    },
+    {
+      "cardId": "K0200",
+      "title": "资本主义社会的经济危机",
+      "sourceStart": 1091,
+      "sourceEnd": 1100
+    },
+    {
+      "cardId": "K0201",
+      "title": "职能：",
+      "sourceStart": 1101,
+      "sourceEnd": 1106
+    },
+    {
+      "cardId": "K0202",
+      "title": "内容：",
+      "sourceStart": 1107,
+      "sourceEnd": 1113
+    },
+    {
+      "cardId": "K0203",
+      "title": "本质：",
+      "sourceStart": 1114,
+      "sourceEnd": 1118
+    },
+    {
+      "cardId": "K0204",
+      "title": "材料关键词与知识点的对应关系",
+      "sourceStart": 1119,
+      "sourceEnd": 1134
+    },
+    {
+      "cardId": "K0205",
+      "title": "唯物论模板",
+      "sourceStart": 1135,
+      "sourceEnd": 1146
+    },
+    {
+      "cardId": "K0206",
+      "title": "辩证法模板",
+      "sourceStart": 1147,
+      "sourceEnd": 1160
+    },
+    {
+      "cardId": "K0207",
+      "title": "认识论模板",
+      "sourceStart": 1161,
+      "sourceEnd": 1170
+    },
+    {
+      "cardId": "K0208",
+      "title": "唯物史观模板",
+      "sourceStart": 1171,
+      "sourceEnd": 1182
+    },
+    {
+      "cardId": "K0209",
+      "title": "守正创新模板",
+      "sourceStart": 1183,
+      "sourceEnd": 1194
+    },
+    {
+      "cardId": "K0210",
+      "title": "材料题：",
+      "sourceStart": 1195,
+      "sourceEnd": 1198
+    },
+    {
+      "cardId": "K0211",
+      "title": "整体情况：",
+      "sourceStart": 1199,
+      "sourceEnd": 1205
+    },
+    {
+      "cardId": "K0212",
+      "title": "划重点：可能考选择和简答的",
+      "sourceStart": 1206,
+      "sourceEnd": 1239
+    },
+    {
+      "cardId": "K0213",
+      "title": "简答题：",
+      "sourceStart": 1240,
+      "sourceEnd": 1245
+    },
+    {
+      "cardId": "K0214",
+      "title": "材料题：习大大的两端讲话",
+      "sourceStart": 1246,
+      "sourceEnd": 1248
+    },
+    {
+      "cardId": "K0215",
+      "title": "选择判断题：",
+      "sourceStart": 1249,
+      "sourceEnd": 1250
+    }
+  ],
+  "notes": [
+    "源文件实际位于 source/，脚本同时兼容 source/、sources/ 和项目根目录。",
+    "连续章节标题会计入相邻卡片覆盖范围，避免遗漏；卡片标题仍使用知识点标题。"
+  ]
+}
