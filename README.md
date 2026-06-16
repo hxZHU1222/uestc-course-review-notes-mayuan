@@ -1,4 +1,8 @@
-<img width="2534" height="1203" alt="image" src="https://github.com/user-attachments/assets/91beb74a-40e0-4a52-b9cb-3ea9c0e0c08c" /># UESTC Course Review Notes: 马克思主义基本原理
+# UESTC Course Review Notes: 马克思主义基本原理
+
+
+<img width="2553" height="988" alt="image" src="https://github.com/user-attachments/assets/620ecb93-0e9f-4bb6-bf6e-888fb5a63e37" />
+
 
 这是一个用于《马克思主义基本原理》课程期末复习的静态网页项目，主要面向个人复习、知识点梳理、背诵卡片、选择题练习、简答题复习和思维导图浏览。
 
