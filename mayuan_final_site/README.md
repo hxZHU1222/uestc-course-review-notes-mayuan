@@ -21,16 +21,6 @@ http://127.0.0.1:8000/
 mayuan
 ```
 
-## 重新抽取数据
-
-建议使用 Codex 桌面运行时的 Python，或安装 `pypdf`、`Pillow` 后使用系统 Python：
-
-```bash
-python scripts/build_all.py
-```
-
-生成的数据在 `data/`，思维导图图片在 `assets/mindmap/`。
-
 ## 说明
 
 - 源文件实际位于项目根目录的 `source/`，脚本也兼容 `sources/` 和根目录。
