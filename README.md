@@ -1,4 +1,4 @@
-# UESTC Course Review Notes: 马克思主义基本原理
+<img width="2534" height="1203" alt="image" src="https://github.com/user-attachments/assets/91beb74a-40e0-4a52-b9cb-3ea9c0e0c08c" /># UESTC Course Review Notes: 马克思主义基本原理
 
 这是一个用于《马克思主义基本原理》课程期末复习的静态网页项目，主要面向个人复习、知识点梳理、背诵卡片、选择题练习、简答题复习和思维导图浏览。
 
@@ -27,7 +27,7 @@ https://hxzhu1222.github.io/uestc-course-review-notes-mayuan/
 mayuan
 ```
 
-> 注意：该密码只是前端页面中的简单访问门槛，不构成真正的安全加密。请不要在仓库中放置隐私资料、敏感资料或不适合公开传播的原始文件。
+> 注意：该网页只是便于查看不建议在本网页内做题
 
 ## 本地运行
 
