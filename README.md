@@ -1,6 +1,7 @@
 # UESTC Course Review Notes: 马克思主义基本原理
 
-<img width="2553" height="988" alt="马原复习系统界面预览" src="https://github.com/user-attachments/assets/620ecb93-0e9f-4bb6-bf6e-888fb5a63e37" />
+<img width="2482" height="1236" alt="image" src="https://github.com/user-attachments/assets/c3dff145-fa5b-4389-89cf-d87152d0118b" />
+
 
 这是一个用于《马克思主义基本原理》课程期末复习的纯前端网页应用，面向个人复习、知识点背诵、简答题整理、选择题练习和思维导图浏览。当前版本已更新为浅色 Apple 风格界面，并把“今日复习”、背诵检验、题目状态标记和导图交互整合在同一个入口中。
 
