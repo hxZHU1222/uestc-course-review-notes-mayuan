@@ -21,6 +21,15 @@ class Transform:
         self.flipH = flipH
         self.flipV = flipV
 
+    def apply_point(self, px, py):
+        nx = self.off_x + (px - self.ch_off_x) * self.scale_x
+        ny = self.off_y + (py - self.ch_off_y) * self.scale_y
+        if self.flipH:
+            nx = self.off_x + self.ext_cx - (nx - self.off_x)
+        if self.flipV:
+            ny = self.off_y + self.ext_cy - (ny - self.off_y)
+        return nx, ny
+
     def apply(self, x, y, w, h):
         nx = self.off_x + (x - self.ch_off_x) * self.scale_x
         ny = self.off_y + (y - self.ch_off_y) * self.scale_y
@@ -55,6 +64,26 @@ def parse_xfrm(xfrm_el, is_grp=False):
         return Transform(off_x, off_y, ext_cx, ext_cy, ch_off_x, ch_off_y, ch_ext_cx, ch_ext_cy, flipH, flipV)
     return off_x, off_y, ext_cx, ext_cy, flipH, flipV
 
+def extract_line(node, transforms):
+    spPr = node.find('p:spPr', NS)
+    xfrm = spPr.find('a:xfrm', NS) if spPr is not None else None
+    res = parse_xfrm(xfrm, False)
+    if not res: return []
+    x, y, w, h, flipH, flipV = res
+    
+    start_x = x + w if flipH else x
+    start_y = y + h if flipV else y
+    end_x = x if flipH else x + w
+    end_y = y if flipV else y + h
+    
+    for t in reversed(transforms):
+        start_x, start_y = t.apply_point(start_x, start_y)
+        end_x, end_y = t.apply_point(end_x, end_y)
+        
+    geom = node.find('.//a:prstGeom', NS)
+    prst = geom.attrib.get('prst', 'line') if geom is not None else 'line'
+    return [{'x1': start_x, 'y1': start_y, 'x2': end_x, 'y2': end_y, 'type': prst}]
+
 def extract_node(node, transforms):
     tag = node.tag.split('}')[-1]
     
@@ -75,7 +104,12 @@ def extract_node(node, transforms):
         
     elif tag == 'sp':
         text = ''.join(t.text or '' for t in node.findall('.//a:t', NS)).strip()
-        if not text: return [], []
+        if not text:
+            geom = node.find('.//a:prstGeom', NS)
+            prst = geom.attrib.get('prst') if geom is not None else None
+            if prst and ('line' in prst.lower() or 'connector' in prst.lower() or 'brace' in prst.lower() or 'bracket' in prst.lower()):
+                return [], extract_line(node, transforms)
+            return [], []
         
         spPr = node.find('p:spPr', NS)
         xfrm = spPr.find('a:xfrm', NS) if spPr is not None else None
@@ -88,61 +122,89 @@ def extract_node(node, transforms):
         return [{'text': text, 'x': x, 'y': y, 'w': w, 'h': h}], []
         
     elif tag == 'cxnSp':
-        spPr = node.find('p:spPr', NS)
-        xfrm = spPr.find('a:xfrm', NS) if spPr is not None else None
-        res = parse_xfrm(xfrm, False)
-        if not res: return [], []
-        x, y, w, h, flipH, flipV = res
-        
-        for t in reversed(transforms):
-            x, y, w, h = t.apply(x, y, w, h)
-            
-        start_x, start_y = x, y
-        end_x, end_y = x + w, y + h
-        if flipH: start_x, end_x = end_x, start_x
-        if flipV: start_y, end_y = end_y, start_y
-        
-        geom = node.find('.//a:prstGeom', NS)
-        prst = geom.attrib.get('prst', 'line') if geom is not None else 'line'
-        return [], [{'x1': start_x, 'y1': start_y, 'x2': end_x, 'y2': end_y, 'type': prst}]
+        return [], extract_line(node, transforms)
     
     return [], []
 
-archive = zipfile.ZipFile('/mnt/d/课程作业及相关资料/大二下/course_app/data/mayuan/马原思维导图.pptx')
-root_presentation = ET.fromstring(archive.read('ppt/presentation.xml'))
-size = root_presentation.find('.//p:sldSz', NS)
-slide_w = int(size.attrib.get('cx', 12192000))
-slide_h = int(size.attrib.get('cy', 6858000))
-
-slides = []
-for slide_index in range(1, 14):
-    path = f'ppt/slides/slide{slide_index}.xml'
-    root = ET.fromstring(archive.read(path))
-    spTree = root.find('.//p:spTree', NS)
+def main():
+    archive = zipfile.ZipFile('/mnt/d/课程作业及相关资料/大二下/course_app/data/mayuan/马原思维导图.pptx')
+    root_presentation = ET.fromstring(archive.read('ppt/presentation.xml'))
+    size = root_presentation.find('.//p:sldSz', NS)
+    slide_w = int(size.attrib.get('cx', 12192000))
+    slide_h = int(size.attrib.get('cy', 6858000))
     
-    all_nodes, all_lines = extract_node(spTree, [])
+    slides = []
+    for slide_index in range(1, 14):
+        try:
+            path = f'ppt/slides/slide{slide_index}.xml'
+            xml_data = archive.read(path)
+        except KeyError:
+            break
+        root = ET.fromstring(xml_data)
+        spTree = root.find('.//p:spTree', NS)
+        
+        all_nodes, all_lines = extract_node(spTree, [])
+        
+        for i, n in enumerate(all_nodes):
+            n['id'] = f'M{slide_index:02d}-{i + 1:03d}'
+            n['slide'] = slide_index
+            n['x'] = round(n['x'] / slide_w, 5)
+            n['y'] = round(n['y'] / slide_h, 5)
+            n['w'] = round(n['w'] / slide_w, 5)
+            n['h'] = round(n['h'] / slide_h, 5)
+            n['linkedCardIds'] = []
+            
+        for l in all_lines:
+            l['x1'] = round(l['x1'] / slide_w, 5)
+            l['y1'] = round(l['y1'] / slide_h, 5)
+            l['x2'] = round(l['x2'] / slide_w, 5)
+            l['y2'] = round(l['y2'] / slide_h, 5)
+            
+        final_lines = []
+        for l in all_lines:
+            if 'brace' in l['type'].lower() or 'bracket' in l['type'].lower():
+                brace_x = min(l['x1'], l['x2'])
+                brace_w = abs(l['x2'] - l['x1'])
+                brace_y = min(l['y1'], l['y2'])
+                brace_h = abs(l['y2'] - l['y1'])
+                
+                left_items = []
+                right_items = []
+                
+                for n in all_nodes:
+                    cy = n['y'] + n['h'] / 2
+                    if brace_y - 0.05 <= cy <= brace_y + brace_h + 0.05:
+                        dist_left = brace_x - (n['x'] + n['w'])
+                        dist_right = n['x'] - (brace_x + brace_w)
+                        
+                        if -0.05 <= dist_left < 0.15:
+                            left_items.append(n)
+                        elif -0.15 <= dist_right < 0.05:
+                            right_items.append(n)
+                
+                if left_items and right_items:
+                    for left_node in left_items:
+                        for right_node in right_items:
+                            final_lines.append({
+                                'x1': left_node['x'] + left_node['w'],
+                                'y1': left_node['y'] + left_node['h'] / 2,
+                                'x2': right_node['x'],
+                                'y2': right_node['y'] + right_node['h'] / 2,
+                                'type': 'bentConnector3'
+                            })
+            else:
+                final_lines.append(l)
+        
+        slides.append({'slide': slide_index, 'nodes': all_nodes, 'lines': final_lines})
     
-    for i, n in enumerate(all_nodes):
-        n['id'] = f'M{slide_index:02d}-{i + 1:03d}'
-        n['slide'] = slide_index
-        n['x'] = round(n['x'] / slide_w, 5)
-        n['y'] = round(n['y'] / slide_h, 5)
-        n['w'] = round(n['w'] / slide_w, 5)
-        n['h'] = round(n['h'] / slide_h, 5)
-        n['linkedCardIds'] = []
-        
-    for l in all_lines:
-        l['x1'] = round(l['x1'] / slide_w, 5)
-        l['y1'] = round(l['y1'] / slide_h, 5)
-        l['x2'] = round(l['x2'] / slide_w, 5)
-        l['y2'] = round(l['y2'] / slide_h, 5)
-        
-    slides.append({'slide': slide_index, 'nodes': all_nodes, 'lines': all_lines})
+    mindmap = {
+        'pageCount': len(slides),
+        'nodeCount': sum(len(s['nodes']) for s in slides),
+        'slides': slides
+    }
+    return mindmap
 
-mindmap = {
-    'pageCount': len(slides),
-    'nodeCount': sum(len(s['nodes']) for s in slides),
-    'slides': slides
-}
-with open('data/mindmap_new.json', 'w', encoding='utf-8') as f:
-    json.dump(mindmap, f, ensure_ascii=False, indent=2)
+if __name__ == '__main__':
+    mindmap = main()
+    with open('data/mindmap_new.json', 'w', encoding='utf-8') as f:
+        json.dump(mindmap, f, ensure_ascii=False, indent=2)

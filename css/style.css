@@ -510,6 +510,17 @@ main {
   left: 0;
   pointer-events: none;
   z-index: 1;
+  overflow: visible;
+}
+
+.mm-lines line,
+.mm-lines path {
+  fill: none;
+  stroke: #b9a993;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
 /* ── Native Nodes ── */
@@ -523,9 +534,9 @@ main {
   border: 2px solid #b9a993;
   border-radius: 6px;
   color: #222;
-  font-size: clamp(10px, 1vw, 15px);
+  font-size: var(--mm-font-size, 13px);
   font-weight: 500;
-  line-height: 1.25;
+  line-height: 1.18;
   text-align: center;
   box-shadow: 0 4px 10px rgba(74, 56, 34, 0.06);
   transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.2s;
@@ -551,6 +562,7 @@ main {
   justify-content: center;
   overflow: hidden;
   word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .mm-node:hover,

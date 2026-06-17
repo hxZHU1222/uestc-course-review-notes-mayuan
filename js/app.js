@@ -477,6 +477,43 @@ function mindmapSearchResults(query) {
   return results;
 }
 
+function renderMindmapLine(line) {
+  const x1 = line.x1 * 100;
+  const y1 = line.y1 * 100;
+  const x2 = line.x2 * 100;
+  const y2 = line.y2 * 100;
+  const type = String(line.type || "").toLowerCase();
+
+  if (type === "bentconnector2" || type === "bentconnector3") {
+    if (Math.abs(x2 - x1) >= Math.abs(y2 - y1)) {
+      const mx = (x1 + x2) / 2;
+      return `<path d="M ${x1} ${y1} H ${mx} V ${y2} H ${x2}" />`;
+    }
+    const my = (y1 + y2) / 2;
+    return `<path d="M ${x1} ${y1} V ${my} H ${x2} V ${y2}" />`;
+  }
+
+  return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" />`;
+}
+
+function mindmapNodeFontSize(node) {
+  const textLength = [...node.text].length;
+  if (node.h > node.w * 1.5) return textLength > 10 ? 18 : 20;
+  if (textLength >= 27) return 10;
+  if (textLength >= 22) return 11;
+  if (node.h < 0.05) return textLength >= 14 ? 11 : 12;
+  if (textLength >= 18) return 12;
+  if (node.h < 0.065) return 13;
+  if (node.h < 0.1) return 14;
+  return 16;
+}
+
+function mindmapNodeStyle(node) {
+  const width = Math.max(node.w * 100, 3);
+  const height = Math.max(node.h * 100, 3);
+  return `left:${node.x * 100}%;top:${node.y * 100}%;width:${width}%;height:${height}%;--mm-font-size:${mindmapNodeFontSize(node)}px;`;
+}
+
 function renderMindmap() {
   const mindmap = state.data.mindmap;
   const slide = mindmap.slides.find((item) => item.slide === state.activeSlide) || mindmap.slides[0];
@@ -518,26 +555,14 @@ function renderMindmap() {
   <div class="mindmap-layout">
     <div class="mindmap-stage" id="mmStage">
       <div class="mindmap-zoom-container native-render" id="mmZoom" style="transform: scale(${mindmapState.zoom})">
-        <svg class="mm-lines" width="100%" height="100%">
-          ${(slide.lines || []).map(l => {
-            const x1 = l.x1 * 100; const y1 = l.y1 * 100;
-            const x2 = l.x2 * 100; const y2 = l.y2 * 100;
-            if (l.type === 'bentConnector3') {
-              // Draw a smooth bezier curve for elbow connectors
-              const mx = (x1 + x2) / 2;
-              return `<path d="M ${x1}% ${y1}% C ${mx}% ${y1}%, ${mx}% ${y2}%, ${x2}% ${y2}%" fill="none" stroke="#c0a98b" stroke-width="2.5" />`;
-            } else {
-              return `<line x1="${x1}%" y1="${y1}%" x2="${x2}%" y2="${y2}%" stroke="#c0a98b" stroke-width="2.5" />`;
-            }
-          }).join("")}
+        <svg class="mm-lines" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+          ${(slide.lines || []).map(renderMindmapLine).join("")}
         </svg>
         ${slide.nodes
           .map(
             (node) => {
               const isVertical = node.h > node.w * 1.5;
-              return `<button class="mm-node ${isVertical ? 'vertical-text' : ''} ${node.id === activeNode?.id ? "active" : ""} ${node.id === mindmapState.highlightNodeId ? "highlight-pulse" : ""}" data-node="${node.id}" style="left:${node.x * 100}%;top:${
-                node.y * 100
-              }%;width:${Math.max(node.w * 100, 2)}%;height:${Math.max(node.h * 100, 2)}%;" title="${escapeHtml(node.text)}"><span>${escapeHtml(node.text)}</span></button>`;
+              return `<button class="mm-node ${isVertical ? 'vertical-text' : ''} ${node.id === activeNode?.id ? "active" : ""} ${node.id === mindmapState.highlightNodeId ? "highlight-pulse" : ""}" data-node="${node.id}" style="${mindmapNodeStyle(node)}" title="${escapeHtml(node.text)}"><span>${escapeHtml(node.text)}</span></button>`;
             }
           )
           .join("")}
