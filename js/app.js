@@ -2,7 +2,7 @@ const DATA_FILES = {
   cards: "data/recite_cards.json",
   shortQuestions: "data/short_questions.json",
   choiceQuestions: "data/choice_questions.json",
-  mindmap: "data/mindmap.json",
+  mindmap: "data/mindmap.json?v=2",
   autoLinks: "data/auto_links.json",
   manualLinks: "data/manual_links.json",
   coverage: "data/coverage_report.json",
@@ -354,40 +354,259 @@ function renderChoice() {
   );
 }
 
+/* ── Mindmap persistent state (survives re-renders) ── */
+const mindmapState = {
+  zoom: 1,
+  panX: 0,
+  panY: 0,
+  isDragging: false,
+  dragStartX: 0,
+  dragStartY: 0,
+  scrollStartX: 0,
+  scrollStartY: 0,
+  isFullscreen: false,
+  sidebarVisible: true,
+  cardsExpanded: true,
+  searchQuery: "",
+  highlightNodeId: "",
+};
+
+const ZOOM_MIN = 0.5;
+const ZOOM_MAX = 3;
+const ZOOM_STEP = 0.15;
+
+function expandedLinkedCardsHtml(ids) {
+  const cards = linkedCards(ids);
+  if (!cards.length) {
+    return `<div class="linked-empty">📭 该节点暂无关联的知识卡片。<br><span class="muted" style="font-size:12px;">可在 data/manual_links.json 中手动补充关联。</span></div>`;
+  }
+  if (!mindmapState.cardsExpanded) {
+    return `<div class="linked-cards">${cards
+      .map(
+        (card) => `<article class="linked-mini">
+          <h4>${escapeHtml(card.title)}</h4>
+          <p class="muted">${escapeHtml(card.chapter)} · ${card.id}</p>
+          <ol>${card.bullets.slice(0, 3).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol>
+        </article>`
+      )
+      .join("")}</div>
+    <button class="collapse-btn" data-action="expand-linked">📖 展开完整内容 (${cards.length} 张卡片)</button>`;
+  }
+  return `<div class="linked-detail">${cards
+    .map(
+      (card) => `<article class="linked-detail-card">
+        <h4>${escapeHtml(card.title)}</h4>
+        <div class="detail-meta">
+          <span class="tag level-${card.level}">${card.level}</span>
+          <span class="tag">${escapeHtml(card.chapter)}</span>
+          <span class="tag">${card.id}</span>
+          ${card.kind ? `<span class="tag">${escapeHtml(card.kind)}</span>` : ""}
+          ${card.day ? `<span class="tag">Day ${card.day}</span>` : ""}
+        </div>
+        <ol>${card.bullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol>
+      </article>`
+    )
+    .join("")}</div>
+  <button class="collapse-btn" data-action="collapse-linked">▲ 收起</button>`;
+}
+
+function mindmapSearchResults(query) {
+  if (!query || query.length < 1) return [];
+  const mindmap = state.data.mindmap;
+  const q = query.toLowerCase();
+  const results = [];
+  for (const slide of mindmap.slides) {
+    for (const node of slide.nodes) {
+      if (node.text.toLowerCase().includes(q)) {
+        results.push({ slide: slide.slide, node });
+      }
+      if (results.length >= 30) return results;
+    }
+  }
+  return results;
+}
+
 function renderMindmap() {
   const mindmap = state.data.mindmap;
   const slide = mindmap.slides.find((item) => item.slide === state.activeSlide) || mindmap.slides[0];
   if (!state.activeNodeId && slide.nodes[0]) state.activeNodeId = slide.nodes[0].id;
   const activeNode = slide.nodes.find((node) => node.id === state.activeNodeId) || slide.nodes[0];
-  $("#page-mindmap").innerHTML = `<div class="controls">
-    <div class="filter-grid">
+  const totalSlides = mindmap.slides.length;
+  const isFirst = state.activeSlide <= 1;
+  const isLast = state.activeSlide >= totalSlides;
+  const zoomPct = Math.round(mindmapState.zoom * 100);
+
+  const pageSection = $("#page-mindmap");
+  pageSection.classList.toggle("mindmap-fullscreen", mindmapState.isFullscreen);
+
+  pageSection.innerHTML = `
+  <div class="mindmap-controls">
+    <div class="ctrl-group">
+      <button data-mm-action="prev-page" ${isFirst ? "disabled" : ""} title="上一页 (←)">◀ 上一页</button>
       <select id="slideSelect">${mindmap.slides
         .map((item) => `<option value="${item.slide}" ${item.slide === slide.slide ? "selected" : ""}>第 ${item.slide} 页</option>`)
         .join("")}</select>
-      <span class="muted">${mindmap.pageCount} 页 · ${mindmap.nodeCount} 个节点</span>
+      <button data-mm-action="next-page" ${isLast ? "disabled" : ""} title="下一页 (→)">下一页 ▶</button>
+      <span class="muted" style="font-size:13px;">${mindmap.pageCount} 页 · ${mindmap.nodeCount} 节点</span>
+    </div>
+    <div class="ctrl-group">
+      <button data-mm-action="zoom-out" title="缩小">−</button>
+      <span class="zoom-label">${zoomPct}%</span>
+      <button data-mm-action="zoom-in" title="放大">+</button>
+      <button data-mm-action="zoom-reset" title="重置缩放">1:1</button>
+    </div>
+    <div class="ctrl-group">
+      <button data-mm-action="toggle-fullscreen" title="全屏模式">${mindmapState.isFullscreen ? "✕ 退出全屏" : "⛶ 全屏"}</button>
+    </div>
+    <div class="ctrl-sep"></div>
+    <div class="mindmap-search-wrap">
+      <input id="mmSearch" type="text" placeholder="搜索全部节点…" value="${escapeHtml(mindmapState.searchQuery)}" autocomplete="off" />
+      <div class="mindmap-search-results" id="mmSearchResults"></div>
     </div>
   </div>
   <div class="mindmap-layout">
-    <div class="mindmap-stage">
-      <img src="${escapeHtml(slide.image)}" alt="第 ${slide.slide} 页思维导图" />
-      ${slide.nodes
-        .map(
-          (node) =>
-            `<button class="hotspot ${node.id === activeNode?.id ? "active" : ""}" data-node="${node.id}" style="left:${node.x * 100}%;top:${
-              node.y * 100
-            }%;width:${Math.max(node.w * 100, 2)}%;height:${Math.max(node.h * 100, 2)}%;" title="${escapeHtml(node.text)}"></button>`
-        )
-        .join("")}
+    <div class="mindmap-stage" id="mmStage">
+      <div class="mindmap-zoom-container native-render" id="mmZoom" style="transform: scale(${mindmapState.zoom})">
+        <svg class="mm-lines" width="100%" height="100%">
+          ${(slide.lines || []).map(l => {
+            const x1 = l.x1 * 100; const y1 = l.y1 * 100;
+            const x2 = l.x2 * 100; const y2 = l.y2 * 100;
+            if (l.type === 'bentConnector3') {
+              // Draw a smooth bezier curve for elbow connectors
+              const mx = (x1 + x2) / 2;
+              return `<path d="M ${x1}% ${y1}% C ${mx}% ${y1}%, ${mx}% ${y2}%, ${x2}% ${y2}%" fill="none" stroke="#c0a98b" stroke-width="2.5" />`;
+            } else {
+              return `<line x1="${x1}%" y1="${y1}%" x2="${x2}%" y2="${y2}%" stroke="#c0a98b" stroke-width="2.5" />`;
+            }
+          }).join("")}
+        </svg>
+        ${slide.nodes
+          .map(
+            (node) => {
+              const isVertical = node.h > node.w * 1.5;
+              return `<button class="mm-node ${isVertical ? 'vertical-text' : ''} ${node.id === activeNode?.id ? "active" : ""} ${node.id === mindmapState.highlightNodeId ? "highlight-pulse" : ""}" data-node="${node.id}" style="left:${node.x * 100}%;top:${
+                node.y * 100
+              }%;width:${Math.max(node.w * 100, 2)}%;height:${Math.max(node.h * 100, 2)}%;" title="${escapeHtml(node.text)}"><span>${escapeHtml(node.text)}</span></button>`;
+            }
+          )
+          .join("")}
+      </div>
+      <div class="minimap ${mindmapState.zoom > 1 ? "visible" : ""}" id="mmMinimap">
+        <div class="minimap-bg"></div>
+        <div class="minimap-viewport" id="mmMinimapViewport"></div>
+      </div>
     </div>
-    <aside class="panel">
+    <aside class="mindmap-sidebar ${!mindmapState.sidebarVisible && mindmapState.isFullscreen ? "sidebar-hidden" : ""}" id="mmSidebar">
       <h2>本页节点</h2>
       <div class="node-list">${slide.nodes
         .map((node) => `<button class="chip ${node.id === activeNode?.id ? "active" : ""}" data-node="${node.id}">${escapeHtml(node.text)}</button>`)
         .join("")}</div>
       <h3>${activeNode ? escapeHtml(activeNode.text) : "暂无节点"}</h3>
-      ${activeNode ? linkedCardsHtml(getLinks(activeNode.id)) : ""}
+      ${activeNode ? expandedLinkedCardsHtml(getLinks(activeNode.id)) : ""}
     </aside>
+    <button class="sidebar-toggle-float" data-mm-action="toggle-sidebar" id="mmSidebarToggle">${mindmapState.sidebarVisible ? "◁ 隐藏" : "▷ 侧栏"}</button>
   </div>`;
+
+  /* Restore scroll position if we had one, then set up minimap */
+  requestAnimationFrame(() => {
+    updateMinimap();
+    /* Re-focus the search input if user was typing */
+    if (mindmapState.searchQuery) {
+      const inp = $("#mmSearch");
+      if (inp) {
+        inp.focus();
+        inp.setSelectionRange(inp.value.length, inp.value.length);
+        doMindmapSearch(mindmapState.searchQuery);
+      }
+    }
+  });
+}
+
+/* ── Zoom helpers ── */
+function setZoom(newZoom, centerOnMouse, stage, mx, my) {
+  const old = mindmapState.zoom;
+  mindmapState.zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, newZoom));
+  const container = $("#mmZoom");
+  if (!container) return;
+  if (centerOnMouse && stage) {
+    const ratio = mindmapState.zoom / old;
+    const sl = stage.scrollLeft;
+    const st = stage.scrollTop;
+    const newSl = (sl + mx) * ratio - mx;
+    const newSt = (st + my) * ratio - my;
+    container.style.transition = "none";
+    container.style.transform = `scale(${mindmapState.zoom})`;
+    stage.scrollLeft = newSl;
+    stage.scrollTop = newSt;
+    requestAnimationFrame(() => {
+      container.style.transition = "";
+    });
+  } else {
+    container.style.transform = `scale(${mindmapState.zoom})`;
+  }
+  /* Update zoom label */
+  const label = $(".zoom-label");
+  if (label) label.textContent = `${Math.round(mindmapState.zoom * 100)}%`;
+  /* Update minimap visibility */
+  const minimap = $("#mmMinimap");
+  if (minimap) minimap.classList.toggle("visible", mindmapState.zoom > 1);
+  updateMinimap();
+}
+
+/* ── Minimap ── */
+function updateMinimap() {
+  const stage = $("#mmStage");
+  const minimap = $("#mmMinimap");
+  const viewport = $("#mmMinimapViewport");
+  const container = $("#mmZoom");
+  if (!stage || !minimap || !viewport || !container) return;
+  if (mindmapState.zoom <= 1) return;
+
+  const mmImg = minimap.querySelector(".minimap-bg");
+  if (!mmImg) return;
+  const mmW = minimap.offsetWidth;
+  const mmH = minimap.offsetHeight;
+  if (!mmW || !mmH) return;
+
+  const contentW = container.scrollWidth * mindmapState.zoom;
+  const contentH = container.scrollHeight * mindmapState.zoom;
+  if (!contentW || !contentH) return;
+
+  const vpW = stage.clientWidth / contentW * mmW;
+  const vpH = stage.clientHeight / contentH * mmH;
+  const vpX = stage.scrollLeft / contentW * mmW;
+  const vpY = stage.scrollTop / contentH * mmH;
+
+  viewport.style.left = `${vpX}px`;
+  viewport.style.top = `${vpY}px`;
+  viewport.style.width = `${Math.min(vpW, mmW)}px`;
+  viewport.style.height = `${Math.min(vpH, mmH)}px`;
+}
+
+/* ── Search ── */
+function doMindmapSearch(query) {
+  const resultsEl = $("#mmSearchResults");
+  if (!resultsEl) return;
+  if (!query || query.length < 1) {
+    resultsEl.classList.remove("open");
+    resultsEl.innerHTML = "";
+    return;
+  }
+  const results = mindmapSearchResults(query);
+  if (!results.length) {
+    resultsEl.innerHTML = `<div class="search-empty">未找到匹配节点</div>`;
+    resultsEl.classList.add("open");
+    return;
+  }
+  resultsEl.innerHTML = results
+    .map(
+      (r) => `<div class="search-item" data-search-slide="${r.slide}" data-search-node="${r.node.id}">
+        <span class="slide-badge">${r.slide}</span>
+        <span class="node-text">${escapeHtml(r.node.text)}</span>
+      </div>`
+    )
+    .join("");
+  resultsEl.classList.add("open");
 }
 
 function renderCheck() {
@@ -455,7 +674,14 @@ function setPage(page) {
 function attachEvents() {
   document.addEventListener("click", (event) => {
     const button = event.target.closest("button");
-    if (!button) return;
+    if (!button) {
+      /* Close search results when clicking outside */
+      const results = $("#mmSearchResults");
+      if (results && !event.target.closest(".mindmap-search-wrap")) {
+        results.classList.remove("open");
+      }
+      return;
+    }
     if (button.dataset.page) setPage(button.dataset.page);
     if (button.dataset.go) setPage(button.dataset.go);
     if (button.dataset.mode) {
@@ -488,8 +714,93 @@ function attachEvents() {
     }
     if (button.dataset.node) {
       state.activeNodeId = button.dataset.node;
+      mindmapState.highlightNodeId = "";
+      mindmapState.cardsExpanded = true;
       renderMindmap();
     }
+    /* ── Mindmap-specific actions ── */
+    if (button.dataset.mmAction) {
+      const action = button.dataset.mmAction;
+      if (action === "zoom-in") setZoom(mindmapState.zoom + ZOOM_STEP);
+      if (action === "zoom-out") setZoom(mindmapState.zoom - ZOOM_STEP);
+      if (action === "zoom-reset") {
+        mindmapState.zoom = 1;
+        const container = $("#mmZoom");
+        if (container) container.style.transform = `scale(1)`;
+        const label = $(".zoom-label");
+        if (label) label.textContent = "100%";
+        const minimap = $("#mmMinimap");
+        if (minimap) minimap.classList.remove("visible");
+      }
+      if (action === "prev-page") {
+        if (state.activeSlide > 1) {
+          state.activeSlide--;
+          state.activeNodeId = "";
+          mindmapState.highlightNodeId = "";
+          mindmapState.zoom = 1;
+          renderMindmap();
+        }
+      }
+      if (action === "next-page") {
+        const total = state.data.mindmap.slides.length;
+        if (state.activeSlide < total) {
+          state.activeSlide++;
+          state.activeNodeId = "";
+          mindmapState.highlightNodeId = "";
+          mindmapState.zoom = 1;
+          renderMindmap();
+        }
+      }
+      if (action === "toggle-fullscreen") {
+        mindmapState.isFullscreen = !mindmapState.isFullscreen;
+        mindmapState.sidebarVisible = true;
+        renderMindmap();
+      }
+      if (action === "toggle-sidebar") {
+        mindmapState.sidebarVisible = !mindmapState.sidebarVisible;
+        const sidebar = $("#mmSidebar");
+        const toggle = $("#mmSidebarToggle");
+        if (sidebar) sidebar.classList.toggle("sidebar-hidden", !mindmapState.sidebarVisible);
+        if (toggle) toggle.textContent = mindmapState.sidebarVisible ? "◁ 隐藏" : "▷ 侧栏";
+      }
+    }
+    /* ── Expand/collapse linked cards ── */
+    if (button.dataset.action === "expand-linked") {
+      mindmapState.cardsExpanded = true;
+      renderMindmap();
+    }
+    if (button.dataset.action === "collapse-linked") {
+      mindmapState.cardsExpanded = false;
+      renderMindmap();
+    }
+  });
+
+  /* ── Search result click ── */
+  document.addEventListener("click", (event) => {
+    const item = event.target.closest(".search-item");
+    if (!item) return;
+    const slideNum = Number(item.dataset.searchSlide);
+    const nodeId = item.dataset.searchNode;
+    state.activeSlide = slideNum;
+    state.activeNodeId = nodeId;
+    mindmapState.highlightNodeId = nodeId;
+    mindmapState.cardsExpanded = true;
+    mindmapState.zoom = 1;
+    const results = $("#mmSearchResults");
+    if (results) results.classList.remove("open");
+    renderMindmap();
+    /* After render, scroll the hotspot into view */
+    requestAnimationFrame(() => {
+      const hotspot = $(`button.hotspot[data-node="${nodeId}"]`);
+      if (hotspot) {
+        hotspot.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+      }
+      /* Remove highlight after animation */
+      setTimeout(() => {
+        mindmapState.highlightNodeId = "";
+        if (hotspot) hotspot.classList.remove("highlight-pulse");
+      }, 2500);
+    });
   });
 
   document.addEventListener("change", (event) => {
@@ -512,6 +823,8 @@ function attachEvents() {
     if (event.target.id === "slideSelect") {
       state.activeSlide = Number(event.target.value);
       state.activeNodeId = "";
+      mindmapState.highlightNodeId = "";
+      mindmapState.zoom = 1;
       renderMindmap();
     }
   });
@@ -533,7 +846,131 @@ function attachEvents() {
       formValues("choiceFilters", "choice");
       renderChoice();
     }
+    /* ── Mindmap search input ── */
+    if (event.target.id === "mmSearch") {
+      mindmapState.searchQuery = event.target.value;
+      doMindmapSearch(mindmapState.searchQuery);
+    }
   });
+
+  /* ── Ctrl+Scroll wheel zoom ── */
+  document.addEventListener("wheel", (event) => {
+    if (!event.target.closest("#mmStage")) return;
+    if (!event.ctrlKey && !event.metaKey) return;
+    event.preventDefault();
+    const stage = $("#mmStage");
+    if (!stage) return;
+    const rect = stage.getBoundingClientRect();
+    const mx = event.clientX - rect.left;
+    const my = event.clientY - rect.top;
+    const delta = event.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP;
+    setZoom(mindmapState.zoom + delta, true, stage, mx, my);
+  }, { passive: false });
+
+  /* ── Drag to pan ── */
+  document.addEventListener("mousedown", (event) => {
+    const stage = event.target.closest("#mmStage");
+    if (!stage) return;
+    if (event.target.closest("button")) return;
+    if (event.target.closest(".minimap")) return;
+    if (mindmapState.zoom <= 1) return;
+    mindmapState.isDragging = true;
+    mindmapState.dragStartX = event.clientX;
+    mindmapState.dragStartY = event.clientY;
+    mindmapState.scrollStartX = stage.scrollLeft;
+    mindmapState.scrollStartY = stage.scrollTop;
+    const container = $("#mmZoom");
+    if (container) container.classList.add("dragging");
+    event.preventDefault();
+  });
+
+  document.addEventListener("mousemove", (event) => {
+    if (!mindmapState.isDragging) return;
+    const stage = $("#mmStage");
+    if (!stage) return;
+    const dx = event.clientX - mindmapState.dragStartX;
+    const dy = event.clientY - mindmapState.dragStartY;
+    stage.scrollLeft = mindmapState.scrollStartX - dx;
+    stage.scrollTop = mindmapState.scrollStartY - dy;
+    updateMinimap();
+  });
+
+  document.addEventListener("mouseup", () => {
+    if (!mindmapState.isDragging) return;
+    mindmapState.isDragging = false;
+    const container = $("#mmZoom");
+    if (container) container.classList.remove("dragging");
+  });
+
+  /* ── Minimap click navigation ── */
+  document.addEventListener("mousedown", (event) => {
+    const minimap = event.target.closest("#mmMinimap");
+    if (!minimap) return;
+    event.preventDefault();
+    event.stopPropagation();
+    navigateViaMinimap(event, minimap);
+  });
+
+  document.addEventListener("mousemove", (event) => {
+    if (!event.buttons) return;
+    const minimap = event.target.closest("#mmMinimap");
+    if (!minimap) return;
+    navigateViaMinimap(event, minimap);
+  });
+
+  /* ── Stage scroll → update minimap ── */
+  document.addEventListener("scroll", () => {
+    updateMinimap();
+  }, true);
+
+  /* ── Keyboard shortcuts ── */
+  document.addEventListener("keydown", (event) => {
+    if (state.page !== "mindmap") return;
+    /* Don't capture when typing in inputs */
+    if (event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA" || event.target.tagName === "SELECT") return;
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      if (state.activeSlide > 1) {
+        state.activeSlide--;
+        state.activeNodeId = "";
+        mindmapState.highlightNodeId = "";
+        mindmapState.zoom = 1;
+        renderMindmap();
+      }
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      const total = state.data.mindmap.slides.length;
+      if (state.activeSlide < total) {
+        state.activeSlide++;
+        state.activeNodeId = "";
+        mindmapState.highlightNodeId = "";
+        mindmapState.zoom = 1;
+        renderMindmap();
+      }
+    }
+    if (event.key === "Escape" && mindmapState.isFullscreen) {
+      mindmapState.isFullscreen = false;
+      renderMindmap();
+    }
+  });
+}
+
+function navigateViaMinimap(event, minimap) {
+  const stage = $("#mmStage");
+  const container = $("#mmZoom");
+  if (!stage || !container) return;
+  const mmImg = minimap.querySelector(".minimap-bg");
+  if (!mmImg) return;
+  const rect = minimap.getBoundingClientRect();
+  const mx = (event.clientX - rect.left) / rect.width;
+  const my = (event.clientY - rect.top) / rect.height;
+  const contentW = container.scrollWidth * mindmapState.zoom;
+  const contentH = container.scrollHeight * mindmapState.zoom;
+  stage.scrollLeft = mx * contentW - stage.clientWidth / 2;
+  stage.scrollTop = my * contentH - stage.clientHeight / 2;
+  updateMinimap();
 }
 
 function setupLogin() {
