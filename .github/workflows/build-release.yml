@@ -3,140 +3,211 @@ name: Build and Release Apps
 on:
   push:
     tags:
-      - 'v*' # 当推送形如 v1.0.0 的 tag 时自动触发打包并发布
+      - "v*"
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release version (e.g. v1.0.0)'
+        description: "Release version, for example v1.0.0"
         required: true
-        default: 'v1.0.0'
+        default: "v1.0.0"
 
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.event.inputs.version || github.ref_name }}
+  cancel-in-progress: false
+
 jobs:
-  build-android:
+  prepare:
+    name: Prepare release metadata
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Resolve release version
+        id: version
+        shell: bash
+        run: |
+          VERSION="${{ github.event.inputs.version || github.ref_name }}"
+          if [[ ! "$VERSION" =~ ^v[0-9]+(\.[0-9]+){2}([-.][0-9A-Za-z.-]+)?$ ]]; then
+            echo "Release version must look like v1.0.0, got: $VERSION" >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  build-android:
+    name: Build Android APK
+    needs: prepare
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ needs.prepare.outputs.version }}
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20
-          
+
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
-          distribution: 'zulu'
-          java-version: '17'
-          
-      - name: Install Capacitor
-        run: |
-          npm init -y
-          npm install @capacitor/core@6 @capacitor/android@6
-          npm install -D @capacitor/cli@6
-          
+          distribution: zulu
+          java-version: 17
+
+      - name: Use official npm registry
+        run: npm config set registry https://registry.npmjs.org
+
+      - name: Install app dependencies
+        run: npm ci
+
       - name: Prepare web files
+        shell: bash
         run: |
-          mkdir dist
-          cp -r index.html css js data assets dist/
-          
-      - name: Initialize Capacitor
+          rm -rf dist
+          mkdir -p dist
+          cp -R index.html css js data assets dist/
+
+      - name: Create Android project
+        shell: bash
         run: |
-          npx cap init "马原复习系统" "com.hxzhu1222.mayuan" --web-dir dist
-          npx cap add android
+          if [[ ! -d android ]]; then
+            npx cap add android
+          fi
           npx cap sync android
-          
-      - name: Generate Keystore
+
+      - name: Configure Android signing
+        shell: bash
         run: |
-          keytool -genkey -v -keystore release.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000 -storepass password -keypass password -dname "CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown"
-          
-      - name: Build and Sign APK
+          if [[ -n "${ANDROID_KEYSTORE_BASE64}" ]]; then
+            if [[ -z "${ANDROID_KEYSTORE_PASSWORD}" || -z "${ANDROID_KEY_ALIAS}" || -z "${ANDROID_KEY_PASSWORD}" ]]; then
+              echo "Android signing secrets are incomplete." >&2
+              echo "Set ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, and ANDROID_KEY_PASSWORD." >&2
+              exit 1
+            fi
+            printf '%s' "${ANDROID_KEYSTORE_BASE64}" | base64 --decode > release.keystore
+            STORE_PASSWORD="${ANDROID_KEYSTORE_PASSWORD}"
+            KEY_ALIAS="${ANDROID_KEY_ALIAS}"
+            KEY_PASSWORD="${ANDROID_KEY_PASSWORD}"
+          else
+            echo "::warning::ANDROID_KEYSTORE_BASE64 is not configured. This APK will use a temporary CI key and cannot update APKs signed by a different key."
+            keytool -genkeypair -v \
+              -keystore release.keystore \
+              -alias temporary-release-key \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -storepass temporary-release-password \
+              -keypass temporary-release-password \
+              -dname "CN=Mayuan Review, OU=Personal, O=Mayuan Review, L=Chengdu, ST=Sichuan, C=CN"
+            STORE_PASSWORD="temporary-release-password"
+            KEY_ALIAS="temporary-release-key"
+            KEY_PASSWORD="temporary-release-password"
+          fi
+
+          {
+            echo "ANDROID_STORE_FILE=$PWD/release.keystore"
+            echo "ANDROID_STORE_PASSWORD=$STORE_PASSWORD"
+            echo "ANDROID_KEY_ALIAS=$KEY_ALIAS"
+            echo "ANDROID_KEY_PASSWORD=$KEY_PASSWORD"
+          } >> "$GITHUB_ENV"
+
+      - name: Build signed APK
+        shell: bash
         run: |
           cd android
-          ./gradlew assembleRelease -Pandroid.injected.signing.store.file=$(pwd)/../release.keystore -Pandroid.injected.signing.store.password=password -Pandroid.injected.signing.key.alias=my-key-alias -Pandroid.injected.signing.key.password=password
-          
-      - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
+          ./gradlew assembleRelease \
+            -Pandroid.injected.signing.store.file="${ANDROID_STORE_FILE}" \
+            -Pandroid.injected.signing.store.password="${ANDROID_STORE_PASSWORD}" \
+            -Pandroid.injected.signing.key.alias="${ANDROID_KEY_ALIAS}" \
+            -Pandroid.injected.signing.key.password="${ANDROID_KEY_PASSWORD}"
+
+      - name: Rename Android artifact
+        shell: bash
+        run: |
+          mkdir -p release
+          cp android/app/build/outputs/apk/release/app-release.apk "release/mayuan-android-${VERSION}.apk"
+
+      - name: Upload Android artifact
+        uses: actions/upload-artifact@v7
         with:
-          name: app-release.apk
-          path: android/app/build/outputs/apk/release/app-release.apk
+          name: mayuan-android
+          path: release/mayuan-android-${{ env.VERSION }}.apk
+          if-no-files-found: error
 
   build-windows:
+    name: Build Windows App
+    needs: prepare
     runs-on: windows-latest
+    env:
+      VERSION: ${{ needs.prepare.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout
+        uses: actions/checkout@v6
+
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20
-          
-      - name: Prepare Electron Files
-        run: |
-          npm init -y
-          npm install electron electron-builder --save-dev
-          
-      - name: Create Electron Main
+
+      - name: Use official npm registry
+        run: npm config set registry https://registry.npmjs.org
+
+      - name: Install app dependencies
+        run: npm ci
+
+      - name: Build Windows installer
+        run: npm run build:windows
+
+      - name: Rename Windows artifact
         shell: bash
         run: |
-          mkdir electron
-          cat << 'EOF' > electron/main.js
-          const { app, BrowserWindow } = require('electron');
-          const path = require('path');
-          function createWindow () {
-            const win = new BrowserWindow({
-              width: 1280,
-              height: 800,
-              autoHideMenuBar: true,
-              webPreferences: { nodeIntegration: false }
-            });
-            win.loadFile('index.html');
-          }
-          app.whenReady().then(createWindow);
-          app.on('window-all-closed', () => {
-            if (process.platform !== 'darwin') app.quit();
-          });
-          EOF
-          
-      - name: Update Package.json for Electron Builder
-        shell: bash
-        run: |
-          node -e "const fs = require('fs'); let p = JSON.parse(fs.readFileSync('package.json')); p.main = 'electron/main.js'; p.build = { appId: 'com.hxzhu1222.mayuan', productName: '马原复习系统', directories: { output: 'build-out' }, win: { target: 'nsis' } }; fs.writeFileSync('package.json', JSON.stringify(p, null, 2));"
-          
-      - name: Build EXE
-        run: |
-          npx electron-builder --win
-          
-      - name: Upload EXE Artifact
-        uses: actions/upload-artifact@v4
+          mkdir -p release
+          EXE_PATH="$(find build-out -type f -name '*.exe' | head -n 1)"
+          if [[ -z "$EXE_PATH" ]]; then
+            echo "No Windows installer was produced in build-out." >&2
+            exit 1
+          fi
+          cp "$EXE_PATH" "release/mayuan-windows-${VERSION}.exe"
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v7
         with:
-          name: windows-exe
-          path: build-out/*.exe
+          name: mayuan-windows
+          path: release/mayuan-windows-${{ env.VERSION }}.exe
+          if-no-files-found: error
 
   release:
-    needs: [build-android, build-windows]
+    name: Publish GitHub Release
+    needs: [prepare, build-android, build-windows]
     runs-on: ubuntu-latest
     steps:
-      - name: Download APK Artifact
-        uses: actions/download-artifact@v4
+      - name: Download Android artifact
+        uses: actions/download-artifact@v8
         with:
-          name: app-release.apk
+          name: mayuan-android
           path: release-artifacts
-          
-      - name: Download EXE Artifact
-        uses: actions/download-artifact@v4
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v8
         with:
-          name: windows-exe
+          name: mayuan-windows
           path: release-artifacts
-          
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
         with:
+          tag_name: ${{ needs.prepare.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          name: Mayuan Review ${{ needs.prepare.outputs.version }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
           files: |
             release-artifacts/*.apk
             release-artifacts/*.exe
-          tag_name: ${{ github.event.inputs.version || github.ref_name }}
-          name: Release ${{ github.event.inputs.version || github.ref_name }}
-          generate_release_notes: true

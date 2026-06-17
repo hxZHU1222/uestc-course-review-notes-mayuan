@@ -1,0 +1,8 @@
+{
+  "appId": "com.hxzhu1222.mayuan",
+  "appName": "Mayuan Review",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}
