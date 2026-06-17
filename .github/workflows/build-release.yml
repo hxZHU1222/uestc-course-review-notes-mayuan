@@ -2,10 +2,8 @@ name: Build and Release Apps
 
 on:
   push:
-    branches:
-      - release
     tags:
-      - 'v*'
+      - 'v*' # 当推送形如 v1.0.0 的 tag 时自动触发打包并发布
   workflow_dispatch:
     inputs:
       version:
@@ -21,39 +19,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-
+          
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: zulu
+          distribution: 'zulu'
           java-version: '17'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Prepare web files
-        run: npm run build:web
-
-      - name: Prepare Capacitor Android project
+          
+      - name: Install Capacitor
         run: |
+          npm init -y
+          npm install @capacitor/core@6 @capacitor/android@6
+          npm install -D @capacitor/cli@6
+          
+      - name: Prepare web files
+        run: |
+          mkdir dist
+          cp -r index.html css js data assets dist/
+          
+      - name: Initialize Capacitor
+        run: |
+          npx cap init "马原复习系统" "com.hxzhu1222.mayuan" --web-dir dist
           npx cap add android
           npx cap sync android
-
+          
       - name: Generate Keystore
         run: |
           keytool -genkey -v -keystore release.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000 -storepass password -keypass password -dname "CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown"
-
+          
       - name: Build and Sign APK
         run: |
           cd android
           ./gradlew assembleRelease -Pandroid.injected.signing.store.file=$(pwd)/../release.keystore -Pandroid.injected.signing.store.password=password -Pandroid.injected.signing.key.alias=my-key-alias -Pandroid.injected.signing.key.password=password
-
+          
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -64,17 +67,17 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
+          
       - name: Prepare Electron Files
         run: |
-          npm install
+          npm init -y
           npm install electron electron-builder --save-dev
-
+          
       - name: Create Electron Main
         shell: bash
         run: |
@@ -96,15 +99,16 @@ jobs:
             if (process.platform !== 'darwin') app.quit();
           });
           EOF
-
+          
       - name: Update Package.json for Electron Builder
         shell: bash
         run: |
           node -e "const fs = require('fs'); let p = JSON.parse(fs.readFileSync('package.json')); p.main = 'electron/main.js'; p.build = { appId: 'com.hxzhu1222.mayuan', productName: '马原复习系统', directories: { output: 'build-out' }, win: { target: 'nsis' } }; fs.writeFileSync('package.json', JSON.stringify(p, null, 2));"
-
+          
       - name: Build EXE
-        run: npx electron-builder --win
-
+        run: |
+          npx electron-builder --win
+          
       - name: Upload EXE Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -113,7 +117,6 @@ jobs:
 
   release:
     needs: [build-android, build-windows]
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
       - name: Download APK Artifact
@@ -121,13 +124,13 @@ jobs:
         with:
           name: app-release.apk
           path: release-artifacts
-
+          
       - name: Download EXE Artifact
         uses: actions/download-artifact@v4
         with:
           name: windows-exe
           path: release-artifacts
-
+          
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:

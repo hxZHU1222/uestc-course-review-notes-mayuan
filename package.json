@@ -5,10 +5,9 @@
   "description": "Static web app packaged with Capacitor for mobile release builds.",
   "scripts": {
     "build:web": "node scripts/prepare-capacitor-web.mjs",
-    "build:ios": "npm run build:web && cap sync ios"
+    "build:ios": "npm run build:web && node scripts/write-capacitor-config.mjs && cap sync ios"
   },
   "dependencies": {
-    "@capacitor/android": "^6.2.1",
     "@capacitor/core": "^6.2.1",
     "@capacitor/ios": "^6.2.1"
   },
