@@ -1,5 +1,6 @@
 const DATA_FILES = {
   cards: "data/recite_cards.json",
+  reciteClozeMasks: "data/recite_cloze_masks.json",
   shortQuestions: "data/short_questions.json",
   choiceQuestions: "data/choice_questions.json",
   mindmap: "data/mindmap.json?v=2",
@@ -113,10 +114,16 @@ function unique(list) {
   return [...new Set(list.filter(Boolean))];
 }
 
-function renderCard(card, compact = false) {
+function renderCard(card, compact = false, options = {}) {
   const status = cardStatusMap()[card.id] || "";
-  const collapsed = status === "mastered" || status === "studied";
-  return `<article class="reader-card ${compact ? "grid" : ""} ${status || ""} ${collapsed ? "collapsed" : ""}" data-card-id="${
+  const checkMode = options.checkMode === true;
+  const collapsed = !checkMode && (status === "mastered" || status === "studied");
+  const bulletHtml = card.bullets
+    .map((item, index) => `<li>${checkMode ? renderClozeText(card.id, index, item) : escapeHtml(item)}</li>`)
+    .join("");
+  return `<article class="reader-card ${compact ? "grid" : ""} ${checkMode ? "check-card" : ""} ${status || ""} ${
+    collapsed ? "collapsed" : ""
+  }" data-card-id="${
     card.id
   }">
     <div class="meta-row">
@@ -127,14 +134,55 @@ function renderCard(card, compact = false) {
     </div>
     <h2>${escapeHtml(card.title)}</h2>
     <p class="chapter">${escapeHtml(card.chapter)} · ${card.id}</p>
-    <ol>${card.bullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol>
+    <ol>${bulletHtml}</ol>
     <div class="button-row">
-      <button data-action="toggle-card">显示/隐藏内容</button>
+      ${
+        checkMode
+          ? `<button data-action="reveal-card-clozes">显示全部遮罩</button><button data-action="hide-card-clozes">重新遮住</button>`
+          : `<button data-action="toggle-card">显示/隐藏内容</button>`
+      }
       <button data-action="card-status" data-status="mastered" class="${status === "mastered" ? "primary" : ""}">已会背</button>
       <button data-action="card-status" data-status="studied" class="${status === "studied" ? "primary" : ""}">已学过</button>
       <button data-action="card-status" data-status="notyet" class="${status === "notyet" ? "primary" : ""}">还不会</button>
     </div>
   </article>`;
+}
+
+function renderClozeText(cardId, bulletIndex, text) {
+  const ranges = clozeRanges(cardId, bulletIndex, text);
+  let cursor = 0;
+  let html = "";
+  ranges.forEach(([start, end]) => {
+    html += escapeHtml(text.slice(cursor, start));
+    html += `<button type="button" class="cloze-mask" data-action="reveal-cloze" aria-label="显示遮住内容"><span class="cloze-answer">${escapeHtml(
+      text.slice(start, end)
+    )}</span></button>`;
+    cursor = end;
+  });
+  html += escapeHtml(text.slice(cursor));
+  return html;
+}
+
+function clozeRanges(cardId, bulletIndex, text) {
+  const manual = state.data.reciteClozeMasks?.cards?.[cardId]?.[String(bulletIndex)];
+  const manualRanges = normalizeClozeRanges(text, manual || []);
+  if (manualRanges.length) return manualRanges;
+  return fallbackClozeRange(text);
+}
+
+function normalizeClozeRanges(text, ranges) {
+  if (!Array.isArray(ranges)) return [];
+  return ranges
+    .filter((range) => Array.isArray(range) && range.length === 2)
+    .map(([start, end]) => [Number(start), Number(end)])
+    .filter(([start, end]) => Number.isInteger(start) && Number.isInteger(end) && start >= 0 && end <= text.length && start < end)
+    .sort((a, b) => a[0] - b[0])
+    .filter(([start, end], index, list) => index === 0 || start >= list[index - 1][1]);
+}
+
+function fallbackClozeRange(text) {
+  const match = /[\u4e00-\u9fa5A-Za-z0-9]{2,18}/.exec(text);
+  return match ? [[match.index, match.index + match[0].length]] : [];
 }
 
 function statusLabel(status) {
@@ -188,6 +236,7 @@ function renderReciteControls(targetId = "reciteFilters", key = "recite") {
       <button type="button" data-mode="horizontal" class="${state.reciteMode === "horizontal" ? "active" : ""}">横向阅读</button>
       <button type="button" data-mode="grid" class="${state.reciteMode === "grid" ? "active" : ""}">网格浏览</button>
       <button type="button" data-mode="single" class="${state.reciteMode === "single" ? "active" : ""}">单张背诵</button>
+      <button type="button" data-mode="check" class="${state.reciteMode === "check" ? "active" : ""}">检验背诵</button>
     </div>
     <div class="filter-grid">
       <select name="day"><option value="">全部 Day</option>${days.map((day) => `<option value="${day}" ${selected(values.day, day)}>Day ${day}</option>`).join("")}</select>
@@ -246,6 +295,8 @@ function renderRecite() {
     }<div class="band button-row"><button data-single="prev">上一张</button><span class="muted">${filtered.length ? state.singleIndex + 1 : 0} / ${
       filtered.length
     }</span><button data-single="next">下一张</button></div></div>`;
+  } else if (state.reciteMode === "check") {
+    body = `<div class="reader-list check">${filtered.map((card) => renderCard(card, false, { checkMode: true })).join("")}</div>`;
   } else {
     body = `<div class="reader-list ${state.reciteMode}">${filtered.map((card) => renderCard(card, state.reciteMode === "grid")).join("")}</div>`;
   }
@@ -695,6 +746,21 @@ function attachEvents() {
     }
     if (button.dataset.action === "toggle-card") {
       button.closest(".reader-card")?.classList.toggle("collapsed");
+    }
+    if (button.dataset.action === "reveal-cloze") {
+      button.classList.add("revealed");
+    }
+    if (button.dataset.action === "reveal-card-clozes") {
+      button
+        .closest(".reader-card")
+        ?.querySelectorAll(".cloze-mask")
+        .forEach((item) => item.classList.add("revealed"));
+    }
+    if (button.dataset.action === "hide-card-clozes") {
+      button
+        .closest(".reader-card")
+        ?.querySelectorAll(".cloze-mask")
+        .forEach((item) => item.classList.remove("revealed"));
     }
     if (button.dataset.action === "card-status") {
       const card = button.closest(".reader-card");

@@ -252,6 +252,12 @@ main {
   display: block;
 }
 
+.reader-list.check {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
 .reader-card {
   max-width: 980px;
   margin: 18px auto;
@@ -344,6 +350,43 @@ main {
 
 .reader-card.grid li {
   font-size: 17px;
+}
+
+.cloze-mask {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.6em;
+  min-height: 1.4em;
+  margin: 0 2px;
+  padding: 0 0.36em;
+  vertical-align: -0.08em;
+  border-color: #b9a993;
+  border-radius: 6px;
+  background: #2f3542;
+  color: transparent;
+  line-height: 1.35;
+  box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.12);
+}
+
+.cloze-mask:hover {
+  border-color: var(--accent-2);
+  background: #3f4858;
+}
+
+.cloze-mask .cloze-answer {
+  color: transparent;
+}
+
+.cloze-mask.revealed {
+  background: var(--soft-green);
+  border-color: var(--accent);
+  color: var(--ink);
+  box-shadow: none;
+}
+
+.cloze-mask.revealed .cloze-answer {
+  color: var(--ink);
 }
 
 .question-grid {
