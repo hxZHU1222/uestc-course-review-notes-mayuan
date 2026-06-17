@@ -6,8 +6,6 @@ const DATA_FILES = {
   mindmap: "data/mindmap.json?v=2",
   autoLinks: "data/auto_links.json",
   manualLinks: "data/manual_links.json",
-  coverage: "data/coverage_report.json",
-  rawWord: "data/raw_word_paragraphs.json",
   sourceManifest: "data/source_manifest.json",
   buildSummary: "data/build_summary.json",
 };
@@ -15,8 +13,9 @@ const DATA_FILES = {
 const state = {
   data: {},
   page: "home",
-  reciteMode: "horizontal",
+  reciteMode: "single",
   singleIndex: 0,
+  singleMotion: "",
   activeSlide: 1,
   activeNodeId: "",
   filters: {
@@ -26,6 +25,8 @@ const state = {
     choice: {},
   },
 };
+
+let revealObserver = null;
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
@@ -138,12 +139,12 @@ function renderCard(card, compact = false, options = {}) {
     <div class="button-row">
       ${
         checkMode
-          ? `<button data-action="reveal-card-clozes">显示全部遮罩</button><button data-action="hide-card-clozes">重新遮住</button>`
-          : `<button data-action="toggle-card">显示/隐藏内容</button>`
+          ? `<button data-action="reveal-card-clozes">显示遮罩内容</button><button data-action="hide-card-clozes">重新遮住</button>`
+          : `<button data-action="toggle-card">展开 / 收起</button>`
       }
-      <button data-action="card-status" data-status="mastered" class="${status === "mastered" ? "primary" : ""}">已会背</button>
-      <button data-action="card-status" data-status="studied" class="${status === "studied" ? "primary" : ""}">已学过</button>
-      <button data-action="card-status" data-status="notyet" class="${status === "notyet" ? "primary" : ""}">还不会</button>
+      <button data-action="card-status" data-status="mastered" class="${status === "mastered" ? "primary" : ""}">掌握</button>
+      <button data-action="card-status" data-status="studied" class="${status === "studied" ? "primary" : ""}">学过</button>
+      <button data-action="card-status" data-status="notyet" class="${status === "notyet" ? "primary" : ""}">待巩固</button>
     </div>
   </article>`;
 }
@@ -186,11 +187,11 @@ function fallbackClozeRange(text) {
 }
 
 function statusLabel(status) {
-  return { mastered: "已会背", studied: "已学过", notyet: "还不会", right: "做对", wrong: "做错", later: "稍后再看" }[status] || "";
+  return { mastered: "掌握", studied: "学过", notyet: "待巩固", right: "做对", wrong: "做错", later: "稍后" }[status] || "";
 }
 
 function pageShell(title, controls, body) {
-  return `<div class="band"><h2>${title}</h2></div>${controls || ""}${body}`;
+  return `<div class="band page-heading"><p class="page-kicker">Mayuan Review</p><h2>${title}</h2></div>${controls || ""}${body}`;
 }
 
 function formValues(formId, key) {
@@ -203,6 +204,49 @@ function formValues(formId, key) {
 
 function selected(value, expected) {
   return String(value || "") === String(expected || "") ? "selected" : "";
+}
+
+function enhanceCurrentPage() {
+  const page = $(`#page-${state.page}`);
+  if (!page) return;
+  prepareRevealItems(page);
+}
+
+function prepareRevealItems(root) {
+  const items = $$(
+    ".hero-panel, .progress-panel, .quick-card, .stat, .panel, .controls, .reader-card, .question-card, .mindmap-stage, .mindmap-sidebar, .source-row, .check-row",
+    root
+  );
+  if (!items.length) return;
+
+  if (!("IntersectionObserver" in window)) {
+    items.forEach((item) => item.classList.add("is-visible"));
+    return;
+  }
+
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
+    );
+  }
+
+  items.forEach((item, index) => {
+    item.classList.add("reveal-item");
+    item.classList.remove("is-visible");
+    item.style.setProperty("--reveal-index", String(index % 8));
+    revealObserver.observe(item);
+  });
+}
+
+function updateChromeScroll() {
+  $(".topbar")?.classList.toggle("is-scrolled", window.scrollY > 8);
 }
 
 function filterCards(key = "recite") {
@@ -225,6 +269,22 @@ function filterCards(key = "recite") {
   });
 }
 
+function resumeCardIndex(cards) {
+  const statusMap = cardStatusMap();
+  const notMastered = cards.findIndex((card) => statusMap[card.id] !== "mastered");
+  return Math.max(0, notMastered);
+}
+
+function goToPage(page) {
+  if (page === "recite") {
+    state.reciteMode = "single";
+    const cards = filterCards("recite");
+    state.singleIndex = resumeCardIndex(cards);
+    state.singleMotion = "deck-next";
+  }
+  setPage(page);
+}
+
 function renderReciteControls(targetId = "reciteFilters", key = "recite") {
   const cards = state.data.cards || [];
   const values = state.filters[key] || {};
@@ -233,10 +293,10 @@ function renderReciteControls(targetId = "reciteFilters", key = "recite") {
   const kinds = unique(cards.map((card) => card.kind));
   return `<form id="${targetId}" class="controls">
     <div class="segmented" id="modeButtons">
-      <button type="button" data-mode="horizontal" class="${state.reciteMode === "horizontal" ? "active" : ""}">横向阅读</button>
-      <button type="button" data-mode="grid" class="${state.reciteMode === "grid" ? "active" : ""}">网格浏览</button>
-      <button type="button" data-mode="single" class="${state.reciteMode === "single" ? "active" : ""}">单张背诵</button>
-      <button type="button" data-mode="check" class="${state.reciteMode === "check" ? "active" : ""}">检验背诵</button>
+      <button type="button" data-mode="horizontal" class="${state.reciteMode === "horizontal" ? "active" : ""}">连续</button>
+      <button type="button" data-mode="grid" class="${state.reciteMode === "grid" ? "active" : ""}">网格</button>
+      <button type="button" data-mode="single" class="${state.reciteMode === "single" ? "active" : ""}">单张</button>
+      <button type="button" data-mode="check" class="${state.reciteMode === "check" ? "active" : ""}">检验</button>
     </div>
     <div class="filter-grid">
       <select name="day"><option value="">全部 Day</option>${days.map((day) => `<option value="${day}" ${selected(values.day, day)}>Day ${day}</option>`).join("")}</select>
@@ -245,9 +305,9 @@ function renderReciteControls(targetId = "reciteFilters", key = "recite") {
       <select name="kind"><option value="">全部类型</option>${kinds.map((x) => `<option ${selected(values.kind, x)}>${escapeHtml(x)}</option>`).join("")}</select>
       <select name="progress">
         <option value="">全部进度</option>
-        <option value="unmastered" ${selected(values.progress, "unmastered")}>只看未会背</option>
-        <option value="mastered" ${selected(values.progress, "mastered")}>只看已会背</option>
-        <option value="notyet" ${selected(values.progress, "notyet")}>只看还不会</option>
+        <option value="unmastered" ${selected(values.progress, "unmastered")}>未掌握</option>
+        <option value="mastered" ${selected(values.progress, "mastered")}>已掌握</option>
+        <option value="notyet" ${selected(values.progress, "notyet")}>待巩固</option>
       </select>
       <input name="search" value="${escapeHtml(values.search || "")}" placeholder="搜索：矛盾 / 真理 / 剩余价值" />
     </div>
@@ -259,24 +319,56 @@ function renderHome() {
   const status = cardStatusMap();
   const mastered = Object.values(status).filter((x) => x === "mastered").length;
   const studied = Object.values(status).filter((x) => x === "studied").length;
+  const notyet = Object.values(status).filter((x) => x === "notyet").length;
+  const totalCards = Number(summary.reciteCards) || 0;
+  const progress = totalCards ? Math.round((mastered / totalCards) * 100) : 0;
+  const nextDay = Math.max(1, Math.ceil((mastered + studied + 1) / 15));
   const page = $("#page-home");
-  page.innerHTML = `<div class="band stats-grid">
-    ${stat("背诵卡", summary.reciteCards)}
-    ${stat("简答题", summary.shortQuestions)}
-    ${stat("选择题", summary.choiceQuestions)}
-    ${stat("导图页数", summary.mindmapPages)}
-    ${stat("Word 覆盖", `${summary.wordCoveredParagraphs}/${summary.wordTotalParagraphs}`)}
-    ${stat("当前进度", `${mastered} 会背 · ${studied} 学过`)}
-  </div>
-  <div class="band panel">
-    <h2>今日建议任务</h2>
-    <p>背诵 Day ${Math.max(1, Math.ceil((mastered + studied + 1) / 15))} 的卡片，刷 10 道选择题，再用思维导图点一遍薄弱节点。</p>
-    <div class="button-row">
-      <button class="primary" data-go="recite">开始背诵</button>
-      <button data-go="choice">刷选择题</button>
-      <button data-go="mindmap">看思维导图</button>
+  page.innerHTML = `<section class="home-hero">
+    <div class="hero-panel">
+      <p class="page-kicker">Today's Review</p>
+      <h2>马原复习</h2>
+      <p>从 Day ${nextDay} 继续，把背诵、题库和导图串成一轮清晰的复习节奏。</p>
+      <div class="hero-actions">
+        <button class="primary" data-go="recite">继续背诵</button>
+        <button data-go="choice">练选择题</button>
+        <button data-go="mindmap">打开导图</button>
+      </div>
     </div>
-  </div>`;
+    <aside class="progress-panel">
+      <div class="progress-ring" style="--progress:${progress}%">
+        <div><strong>${progress}%</strong><span>掌握进度</span></div>
+      </div>
+      <div class="stats-grid">
+        ${stat("掌握", mastered)}
+        ${stat("学过", studied)}
+        ${stat("待巩固", notyet)}
+      </div>
+    </aside>
+  </section>
+  <section class="quick-grid" aria-label="复习入口">
+    <button class="quick-card" data-go="recite">
+      <p>Recite</p>
+      <h3>背诵卡</h3>
+      <p>${summary.reciteCards} 张卡片，支持连续、网格、单张与检验。</p>
+    </button>
+    <button class="quick-card" data-go="short">
+      <p>Short Answer</p>
+      <h3>简答题</h3>
+      <p>${summary.shortQuestions} 道题，保留默写区与关联知识点。</p>
+    </button>
+    <button class="quick-card" data-go="choice">
+      <p>Choice</p>
+      <h3>选择题</h3>
+      <p>${summary.choiceQuestions} 道题，可标记做对、做错或稍后。</p>
+    </button>
+    <button class="quick-card" data-go="mindmap">
+      <p>Mind Map</p>
+      <h3>思维导图</h3>
+      <p>${summary.mindmapPages} 页导图，用节点串联薄弱知识。</p>
+    </button>
+  </section>`;
+  enhanceCurrentPage();
 }
 
 function stat(label, value) {
@@ -289,8 +381,9 @@ function renderRecite() {
   let body = "";
   if (state.reciteMode === "single") {
     if (state.singleIndex >= filtered.length) state.singleIndex = 0;
+    if (state.singleIndex < 0) state.singleIndex = 0;
     const card = filtered[state.singleIndex];
-    body = `<div class="reader-list single">${
+    body = `<div class="reader-list single ${state.singleMotion}">${
       card ? renderCard(card) : `<div class="panel band">没有匹配的卡片。</div>`
     }<div class="band button-row"><button data-single="prev">上一张</button><span class="muted">${filtered.length ? state.singleIndex + 1 : 0} / ${
       filtered.length
@@ -301,12 +394,14 @@ function renderRecite() {
     body = `<div class="reader-list ${state.reciteMode}">${filtered.map((card) => renderCard(card, state.reciteMode === "grid")).join("")}</div>`;
   }
   page.innerHTML = pageShell("背诵", renderReciteControls("reciteFilters"), body);
+  state.singleMotion = "";
+  enhanceCurrentPage();
 }
 
 function renderCardsPage() {
   const cards = filterCards("cards");
   $("#page-cards").innerHTML = pageShell(
-    "卡片列表",
+    "全部卡片",
     renderReciteControls("cardFilters", "cards"),
     `<div class="question-grid">${cards
       .map(
@@ -314,11 +409,12 @@ function renderCardsPage() {
           <h3>${escapeHtml(card.title)}</h3>
           <p class="muted">${card.id} · ${escapeHtml(card.chapter)} · Day ${card.day} · ${card.level}</p>
           <p>${escapeHtml(card.bullets[0] || "")}</p>
-          <button data-open-card="${card.id}">进入背诵</button>
+          <button data-open-card="${card.id}">单张背诵</button>
         </article>`
       )
       .join("")}</div>`
   );
+  enhanceCurrentPage();
 }
 
 function filterQuestions(type) {
@@ -367,12 +463,13 @@ function renderShort() {
           <h3>${q.number}. ${escapeHtml(q.title)}</h3>
           ${q.examYears.length ? `<p class="muted">历年：${q.examYears.map(escapeHtml).join("、")}</p>` : ""}
           <textarea placeholder="默写区"></textarea>
-          <button data-toggle="#links-${q.id}">查看关联知识点</button>
+          <button data-toggle="#links-${q.id}">关联知识点</button>
           <div id="links-${q.id}" class="hidden">${linkedCardsHtml(getLinks(q.id))}</div>
         </article>`
       )
       .join("")}</div>`
   );
+  enhanceCurrentPage();
 }
 
 function renderChoice() {
@@ -395,7 +492,7 @@ function renderChoice() {
             <button data-toggle="#answer-${q.id}">显示答案</button>
             <button data-action="question-status" data-qid="${q.id}" data-status="right">做对</button>
             <button data-action="question-status" data-qid="${q.id}" data-status="wrong">做错</button>
-            <button data-action="question-status" data-qid="${q.id}" data-status="later">稍后再看</button>
+            <button data-action="question-status" data-qid="${q.id}" data-status="later">稍后</button>
           </div>
           <div id="answer-${q.id}" class="answer hidden">正确答案：${escapeHtml(q.answer || "未解析")} ${linkedCardsHtml(getLinks(q.id))}</div>
           ${q.parseError ? `<pre class="raw-block">${escapeHtml(q.raw)}</pre>` : ""}
@@ -403,6 +500,7 @@ function renderChoice() {
       )
       .join("")}</div>`
   );
+  enhanceCurrentPage();
 }
 
 /* ── Mindmap persistent state (survives re-renders) ── */
@@ -429,7 +527,7 @@ const ZOOM_STEP = 0.15;
 function expandedLinkedCardsHtml(ids) {
   const cards = linkedCards(ids);
   if (!cards.length) {
-    return `<div class="linked-empty">📭 该节点暂无关联的知识卡片。<br><span class="muted" style="font-size:12px;">可在 data/manual_links.json 中手动补充关联。</span></div>`;
+    return `<div class="linked-empty">该节点暂无关联的知识卡片。<br><span class="muted" style="font-size:12px;">可在 data/manual_links.json 中手动补充关联。</span></div>`;
   }
   if (!mindmapState.cardsExpanded) {
     return `<div class="linked-cards">${cards
@@ -441,7 +539,7 @@ function expandedLinkedCardsHtml(ids) {
         </article>`
       )
       .join("")}</div>
-    <button class="collapse-btn" data-action="expand-linked">📖 展开完整内容 (${cards.length} 张卡片)</button>`;
+    <button class="collapse-btn" data-action="expand-linked">展开完整内容 (${cards.length} 张卡片)</button>`;
   }
   return `<div class="linked-detail">${cards
     .map(
@@ -458,7 +556,7 @@ function expandedLinkedCardsHtml(ids) {
       </article>`
     )
     .join("")}</div>
-  <button class="collapse-btn" data-action="collapse-linked">▲ 收起</button>`;
+  <button class="collapse-btn" data-action="collapse-linked">收起</button>`;
 }
 
 function mindmapSearchResults(query) {
@@ -530,11 +628,11 @@ function renderMindmap() {
   pageSection.innerHTML = `
   <div class="mindmap-controls">
     <div class="ctrl-group">
-      <button data-mm-action="prev-page" ${isFirst ? "disabled" : ""} title="上一页 (←)">◀ 上一页</button>
+      <button data-mm-action="prev-page" ${isFirst ? "disabled" : ""} title="上一页">上一页</button>
       <select id="slideSelect">${mindmap.slides
         .map((item) => `<option value="${item.slide}" ${item.slide === slide.slide ? "selected" : ""}>第 ${item.slide} 页</option>`)
         .join("")}</select>
-      <button data-mm-action="next-page" ${isLast ? "disabled" : ""} title="下一页 (→)">下一页 ▶</button>
+      <button data-mm-action="next-page" ${isLast ? "disabled" : ""} title="下一页">下一页</button>
       <span class="muted" style="font-size:13px;">${mindmap.pageCount} 页 · ${mindmap.nodeCount} 节点</span>
     </div>
     <div class="ctrl-group">
@@ -544,7 +642,7 @@ function renderMindmap() {
       <button data-mm-action="zoom-reset" title="重置缩放">1:1</button>
     </div>
     <div class="ctrl-group">
-      <button data-mm-action="toggle-fullscreen" title="全屏模式">${mindmapState.isFullscreen ? "✕ 退出全屏" : "⛶ 全屏"}</button>
+      <button data-mm-action="toggle-fullscreen" title="全屏模式">${mindmapState.isFullscreen ? "退出全屏" : "全屏"}</button>
     </div>
     <div class="ctrl-sep"></div>
     <div class="mindmap-search-wrap">
@@ -580,7 +678,7 @@ function renderMindmap() {
       <h3>${activeNode ? escapeHtml(activeNode.text) : "暂无节点"}</h3>
       ${activeNode ? expandedLinkedCardsHtml(getLinks(activeNode.id)) : ""}
     </aside>
-    <button class="sidebar-toggle-float" data-mm-action="toggle-sidebar" id="mmSidebarToggle">${mindmapState.sidebarVisible ? "◁ 隐藏" : "▷ 侧栏"}</button>
+    <button class="sidebar-toggle-float" data-mm-action="toggle-sidebar" id="mmSidebarToggle">${mindmapState.sidebarVisible ? "隐藏侧栏" : "显示侧栏"}</button>
   </div>`;
 
   /* Restore scroll position if we had one, then set up minimap */
@@ -596,6 +694,7 @@ function renderMindmap() {
       }
     }
   });
+  enhanceCurrentPage();
 }
 
 /* ── Zoom helpers ── */
@@ -687,12 +786,8 @@ function doMindmapSearch(query) {
 
 function renderCheck() {
   const summary = state.data.buildSummary;
-  const coverage = state.data.coverage;
   const failures = state.data.choiceQuestions.filter((q) => q.parseError);
   $("#page-check").innerHTML = `<div class="band stats-grid">
-    ${stat("Word 总段落", summary.wordTotalParagraphs)}
-    ${stat("覆盖段落", summary.wordCoveredParagraphs)}
-    ${stat("未覆盖段落", summary.wordUncoveredParagraphs)}
     ${stat("选择题解析失败", summary.choiceParseFailures)}
   </div>
   <div class="band panel">
@@ -707,15 +802,6 @@ function renderCheck() {
       .join("")}</div>
   </div>
   <div class="band panel">
-    <h2>Word 覆盖率报告</h2>
-    <p>${coverage.coveredParagraphs} / ${coverage.totalParagraphs} 段已覆盖。</p>
-    <div class="check-list">${
-      coverage.uncoveredParagraphs.length
-        ? coverage.uncoveredParagraphs.map((row) => `<div class="check-row">#${row.index} ${escapeHtml(row.text)}</div>`).join("")
-        : `<div class="check-row">没有未覆盖段落。</div>`
-    }</div>
-  </div>
-  <div class="band panel">
     <h2>解析失败选择题</h2>
     <div class="check-list">${
       failures.length
@@ -727,6 +813,7 @@ function renderCheck() {
     <h2>开发说明</h2>
     <p>抽取脚本位于 scripts/。源目录实际为 source/，脚本同时兼容 source/、sources/ 与根目录。思维导图图片由 PPTX XML 坐标离线重绘生成。</p>
   </div>`;
+  enhanceCurrentPage();
 }
 
 function renderCurrentPage() {
@@ -740,14 +827,34 @@ function renderCurrentPage() {
 }
 
 function setPage(page) {
+  const previousPage = state.page;
+  const previousEl = $(`#page-${previousPage}`);
+  const nextEl = $(`#page-${page}`);
+  if (!nextEl) return;
+
   state.page = page;
-  $$(".page").forEach((el) => el.classList.toggle("active", el.id === `page-${page}`));
+
+  if (previousEl && previousEl !== nextEl) {
+    previousEl.classList.remove("active", "page-enter");
+    previousEl.classList.add("page-exit");
+    window.setTimeout(() => previousEl.classList.remove("page-exit"), 280);
+  }
+
+  $$(".page").forEach((el) => {
+    if (el !== previousEl) el.classList.toggle("active", el.id === `page-${page}`);
+  });
+  nextEl.classList.add("active", "page-enter");
+  window.setTimeout(() => nextEl.classList.remove("page-enter"), 460);
+
   $$(".nav-tabs button").forEach((btn) => btn.classList.toggle("active", btn.dataset.page === page));
   renderCurrentPage();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function attachEvents() {
+  updateChromeScroll();
+  window.addEventListener("scroll", updateChromeScroll, { passive: true });
+
   document.addEventListener("click", (event) => {
     const button = event.target.closest("button");
     if (!button) {
@@ -758,14 +865,15 @@ function attachEvents() {
       }
       return;
     }
-    if (button.dataset.page) setPage(button.dataset.page);
-    if (button.dataset.go) setPage(button.dataset.go);
+    if (button.dataset.page) goToPage(button.dataset.page);
+    if (button.dataset.go) goToPage(button.dataset.go);
     if (button.dataset.mode) {
       state.reciteMode = button.dataset.mode;
       renderRecite();
     }
     if (button.dataset.single) {
       const filtered = filterCards("recite");
+      state.singleMotion = button.dataset.single === "next" ? "deck-next" : "deck-prev";
       state.singleIndex = button.dataset.single === "next" ? Math.min(state.singleIndex + 1, filtered.length - 1) : Math.max(state.singleIndex - 1, 0);
       renderRecite();
     }
@@ -798,9 +906,9 @@ function attachEvents() {
       $(button.dataset.toggle)?.classList.toggle("hidden");
     }
     if (button.dataset.openCard) {
-      state.page = "recite";
       state.reciteMode = "single";
       state.singleIndex = state.data.cards.findIndex((card) => card.id === button.dataset.openCard);
+      state.singleMotion = "deck-next";
       setPage("recite");
     }
     if (button.dataset.node) {
@@ -852,7 +960,7 @@ function attachEvents() {
         const sidebar = $("#mmSidebar");
         const toggle = $("#mmSidebarToggle");
         if (sidebar) sidebar.classList.toggle("sidebar-hidden", !mindmapState.sidebarVisible);
-        if (toggle) toggle.textContent = mindmapState.sidebarVisible ? "◁ 隐藏" : "▷ 侧栏";
+        if (toggle) toggle.textContent = mindmapState.sidebarVisible ? "隐藏侧栏" : "显示侧栏";
       }
     }
     /* ── Expand/collapse linked cards ── */
@@ -882,7 +990,7 @@ function attachEvents() {
     renderMindmap();
     /* After render, scroll the hotspot into view */
     requestAnimationFrame(() => {
-      const hotspot = $(`button.hotspot[data-node="${nodeId}"]`);
+      const hotspot = $(`button.mm-node[data-node="${nodeId}"]`);
       if (hotspot) {
         hotspot.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
       }
