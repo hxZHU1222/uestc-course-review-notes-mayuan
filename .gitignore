@@ -1,2 +1,4 @@
 goal/
 .antigravitycli/
+__pycache__/
+*.py[cod]
